@@ -1,0 +1,15 @@
+.scroll-up {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 30;
+  background-color: #ffffff ;
+  transition: 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: none;
+}
+
+.scroll-down {
+  transition: 500ms cubic-bezier(0.64, 0, 0, 0.78, 0) 1s;
+  transform: translate3d(0, -360%, 0) translateZ(0)
+}
