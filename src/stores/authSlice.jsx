@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import * as authApi from "../apis/auth-api";
+import { getAccessToken, removeAccessToken } from "../utills/localStorage";
+import { setUserProfile } from "./userSlice";
 const initialInputRegister = {
   firstName: "",
   lastName: "",
@@ -18,7 +20,7 @@ const authSlice = createSlice({
     registerInput: initialInputRegister,
     registerError: initialInputRegister,
     loginInput: initialInputLogin,
-    loginError: "",
+    loginError: initialInputLogin,
     loginOrRegister: true,
     showPassword: { login: false, register: false }, //idx1=login,idx2=register
   },
@@ -31,11 +33,11 @@ const authSlice = createSlice({
       state.registerInput = initialInputRegister;
       state.loginOrRegister = true;
       state.showPassword = { login: false, register: false };
-      state.loginError = "";
+      state.loginError = initialInputLogin;
       state.loginInput = initialInputLogin;
     },
     setLoginOrRegister: (state, action) => {
-      state.loginOrRegister = !state.loginOrRegister;
+      state.loginOrRegister = action.payload;
     },
     setLogin: (state, action) => {
       state.loginOrRegister = action.payload;
@@ -66,3 +68,14 @@ export const {
   setLoginInput,
   setLoginError,
 } = authSlice.actions;
+
+export const fetchUserData = () => async (dispatch) => {
+  try {
+    if (getAccessToken()) {
+      const res = await authApi.getMe();
+      dispatch(setUserProfile(res.data.user));
+    }
+  } catch (err) {
+    removeAccessToken();
+  }
+};

@@ -31,7 +31,16 @@ const registerSchema = Joi.object({
     "string.alphanum": "password must contain number or alphabet",
   }),
 });
-
+const loginSchema = Joi.object({
+  email: Joi.string().required().messages({
+    "string.empty": "email is required",
+    "any.required": "email is required", 
+  }),
+  password: Joi.string().required().messages({
+    "string.empty": "password is required",
+    "any.required": "password is required",
+  }),
+});
 const validateRegister = (input) => {
   const { error } = registerSchema.validate(input, {
     abortEarly: false, // ทำการ validate ทุกตัว if false
@@ -44,5 +53,17 @@ const validateRegister = (input) => {
     return newError;
   }
 };
+const validateLogin = (input) => {
+  const { error } = loginSchema.validate(input, {
+    abortEarly: false, // ทำการ validate ทุกตัว if false
+  });
+  if (error) {
+    const newError = error.details.reduce((acc, el) => {
+      acc[el.context.label] = el.message;
+      return acc;
+    }, {});
+    return newError;
+  }
+};
 
-export default validateRegister;
+export {validateRegister, validateLogin}

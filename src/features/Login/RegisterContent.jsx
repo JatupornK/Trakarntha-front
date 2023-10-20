@@ -1,5 +1,5 @@
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
-import validateRegister from '../../validators/ValidateRegister'
+import {validateRegister} from '../../validators/ValidateRegister'
 import * as authApi from '../../apis/auth-api'
 import {toast} from 'react-toastify'
 import { useDispatch, useSelector } from "react-redux";

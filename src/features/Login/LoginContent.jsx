@@ -5,10 +5,13 @@ import {
   setLoginError,
   setLoginInput,
   setShowPassword,
+  // setUserProfile,
 } from "../../stores/authSlice";
+import { setUserProfile } from "../../stores/userSlice";
 import * as authApi from "../../apis/auth-api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { setAccessToken } from "../../utills/localStorage";
+import { validateLogin } from "../../validators/ValidateRegister";
 export default function LoginContent() {
   const { showPassword, loginInput, loginError } = useSelector(
     (state) => state.auth
@@ -18,15 +21,27 @@ export default function LoginContent() {
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
-      const res = await authApi.login(loginInput);
-      console.log(res)
-      if (res.status === 201) {
+      const result = validateLogin(loginInput);
+      if (result) {
+        dispatch(setLoginError(result));
+      } else {
         dispatch(resetRegisterLoginInput());
-        toast.success(res.data.message);
-        navigate("/all-products");
+        const res = await authApi.login(loginInput);
+        if (res.status === 201) {
+          setAccessToken(res.data.accessToken);
+          const user = await authApi.getMe();
+          dispatch(setUserProfile(user.data.user));
+          navigate("/profile");
+        }
       }
+      // console.log(res)
     } catch (err) {
-      dispatch(setLoginError(err.response?.data.message));
+      dispatch(
+        setLoginError({
+          email: err.response?.data.message,
+          password: err.response?.data.message,
+        })
+      );
     }
   };
   return (
@@ -44,7 +59,7 @@ export default function LoginContent() {
             id="email"
             name="email"
             className={`border px-4 pt-6 pb-2 w-full text-sm relative ${
-              loginError && "border-red-500"
+              loginError?.email && "border-red-500"
             }`}
             onChange={(e) =>
               dispatch(setLoginInput({ [e.target.name]: e.target.value }))
@@ -52,8 +67,8 @@ export default function LoginContent() {
             value={loginInput.email}
           />
         </div>
-        {loginError && (
-          <p className="text-red-500 text-xs mt-1">{loginError}</p>
+        {loginError?.email && (
+          <p className="text-red-500 text-xs mt-1">{loginError?.email}</p>
         )}
         <div className="relative mt-6">
           <div
@@ -77,7 +92,7 @@ export default function LoginContent() {
             id="password"
             name="password"
             className={`border px-4 pt-6 pb-2 w-full text-sm relative ${
-              loginError && "border-red-500"
+              loginError?.password && "border-red-500"
             }`}
             onChange={(e) =>
               dispatch(setLoginInput({ [e.target.name]: e.target.value }))
@@ -85,8 +100,8 @@ export default function LoginContent() {
             value={loginInput.password}
           />
         </div>
-        {loginError && (
-          <p className="text-red-500 text-xs mt-1">{loginError}</p>
+        {loginError?.password && (
+          <p className="text-red-500 text-xs mt-1">{loginError?.password}</p>
         )}
         <button
           type="submit"

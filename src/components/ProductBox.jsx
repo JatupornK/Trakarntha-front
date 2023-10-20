@@ -16,17 +16,10 @@ export default function ProductBox({ products }) {
     e.stopPropagation();
     setIsOpen(() => false);
   };
-  // console.log(isHover)
-  
-  // if(isOpen) {
-  //   document.body.style.paddingRight = `${window.innerWidth - document.body.offsetWidth}px`
-  //   document.body.style.overflowY = 'hidden'
-  // }else if(!isOpen) {
-  //   // document.body.style.paddingRight = '0px'
-  //   document.body.style.overflowY = 'auto'
-  // }
   let div = document.querySelector("body");
+  // let html = document.querySelector('html')
   div.style.overflowY = isOpen ? "hidden" : "auto";
+  // html.style.cssText = isOpen? '100vw':''
   return (
     <>
       <div

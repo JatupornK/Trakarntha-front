@@ -8,6 +8,8 @@ import OurStoryPage from "../pages/OurStoryPage";
 import MembershipPage from "../pages/MembershipPage";
 import Header from "../layouts/Header";
 import LoginPage from "../pages/LoginPage";
+import RedirectIfNotAuthenticate from "../features/Login/RedirectIfNotAuthenticate";
+import RedirectIfAuthenticate from "../features/Login/RedirectIfAuthenticate";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <ProfilePage />,
+        element: (
+          <RedirectIfNotAuthenticate>
+            <ProfilePage />
+          </RedirectIfNotAuthenticate>
+        ),
       },
       {
         path: "/promotion",
@@ -43,7 +49,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LoginPage />,
+        element: (
+          <RedirectIfAuthenticate>
+            <LoginPage />
+          </RedirectIfAuthenticate>
+        ),
       },
     ],
   },

@@ -8,7 +8,7 @@ export default function LoginHeader() {
     <div className="flex justify-center pt-5">
       <div className="w-full grid grid-flow-col grid-cols-2">
         <div
-          onClick={() => dispatch(setLoginOrRegister())}
+          onClick={() => dispatch(setLoginOrRegister(true))}
           className={`mr-3 text-center cursor-pointer font-medium text-xl ${
             loginOrRegister ? "text-black" : "text-gray-500"
           } `}
@@ -17,7 +17,7 @@ export default function LoginHeader() {
           <hr className={`border-2 ${loginOrRegister ? "border-black" : ""} mt-1`} />
         </div>
         <div
-          onClick={() => dispatch(setLoginOrRegister())}
+          onClick={() => dispatch(setLoginOrRegister(false))}
           className={`text-center cursor-pointer font-medium text-xl ${
             !loginOrRegister ? "text-black" : "text-gray-500"
           } `}
