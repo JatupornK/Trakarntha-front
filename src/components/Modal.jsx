@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import ProductSelect from "../features/products/ProductSelect";
-export default function Modal({ onClose, products }) {
-  console.log(products);
+export default function Modal({ onClose, product }) {
+  // console.log(product);
   return (
     <>
       <div className="fixed left-0 top-0 h-full w-full z-50">
@@ -12,18 +12,21 @@ export default function Modal({ onClose, products }) {
               <div className=" col-span-7">
                 <div className="p-5">
                   <img
-                    src={products.Images[0].image}
+                    src={product.Images[0].image}
                     className={`object-fill`}
                   />
                 </div>
               </div>
               <div className="col-span-5 py-10 break-normal pr-10 whitespace-normal">
-                <div className="text-4xl font-bold">{products.name}</div>
-                <div className="mt-3 text-lg max-h-36 text-ellipsis overflow-hidden">{products.description}</div>
-                <h3 className="mt-3 text-2xl">฿ {products.price}</h3>
+                <div className="text-4xl font-bold">{product.name}</div>
+                <div className="mt-3 text-lg max-h-36 text-ellipsis overflow-hidden">{product.description}</div>
+                <h3 className="mt-3 text-2xl">฿ {product.price}</h3>
                 <ProductSelect
-                  list={products.ProductSizes}
-                  name={products.name}
+                  product={product}
+                  onClose={onClose}
+                  // list={product.ProductSizes}
+                  // name={product.name}
+                  // price={product.price}
                 />
                 <div className="flex w-full justify-center mt-2">
                   <a

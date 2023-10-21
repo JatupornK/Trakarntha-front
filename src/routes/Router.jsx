@@ -10,6 +10,7 @@ import Header from "../layouts/Header";
 import LoginPage from "../pages/LoginPage";
 import RedirectIfNotAuthenticate from "../features/Login/RedirectIfNotAuthenticate";
 import RedirectIfAuthenticate from "../features/Login/RedirectIfAuthenticate";
+import OrderPage from "../pages/OrderPage";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
           <RedirectIfAuthenticate>
             <LoginPage />
           </RedirectIfAuthenticate>
+        ),
+      },
+      {
+        path: "/order",
+        element: (
+          <RedirectIfNotAuthenticate>
+            <OrderPage />
+          </RedirectIfNotAuthenticate>
         ),
       },
     ],

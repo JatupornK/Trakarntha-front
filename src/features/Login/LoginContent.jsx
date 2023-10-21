@@ -7,7 +7,7 @@ import {
   setShowPassword,
   // setUserProfile,
 } from "../../stores/authSlice";
-import { setUserProfile } from "../../stores/userSlice";
+import { fetchCartData, setUserProfile } from "../../stores/userSlice";
 import * as authApi from "../../apis/auth-api";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../utills/localStorage";
@@ -29,7 +29,8 @@ export default function LoginContent() {
         const res = await authApi.login(loginInput);
         if (res.status === 201) {
           setAccessToken(res.data.accessToken);
-          const user = await authApi.getMe();
+          const[user,cart] = await Promise.all([authApi.getMe(),authApi.getUserCartData()])
+          dispatch(fetchCartData(cart.data.productsInCart))
           dispatch(setUserProfile(user.data.user));
           navigate("/profile");
         }

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as authApi from "../apis/auth-api";
 import { getAccessToken, removeAccessToken } from "../utills/localStorage";
-import { setUserProfile } from "./userSlice";
+import { setUserProfile, fetchCartData } from "./userSlice";
 const initialInputRegister = {
   firstName: "",
   lastName: "",
@@ -72,8 +72,12 @@ export const {
 export const fetchUserData = () => async (dispatch) => {
   try {
     if (getAccessToken()) {
-      const res = await authApi.getMe();
-      dispatch(setUserProfile(res.data.user));
+      const [user, cart] = await Promise.all([
+        authApi.getMe(),
+        authApi.getUserCartData(),
+      ]);
+      dispatch(fetchCartData(cart.data.productsInCart));
+      dispatch(setUserProfile(user.data.user));
     }
   } catch (err) {
     removeAccessToken();

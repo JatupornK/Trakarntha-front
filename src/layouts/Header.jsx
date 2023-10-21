@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import MenuList from "./MenuList";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import profile from "../assets/User-pic.png";
@@ -8,13 +8,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../stores/authSlice";
 import DropDownProfileBox from "../features/Login/DropDownProfileBox";
 import { setIsHoverProfile } from "../stores/userSlice";
+// import * as authApi from '../apis/auth-api'
 export default function Header() {
   const [scrollDirection, setScrollDirection] = useState("up");
-  const { userProfile } = useSelector((state) => state.user);
+  const { userProfile, cartData } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, []);
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
-    dispatch(fetchUserData());
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
       const direction = scrollY > lastScrollY ? "down" : "up";
@@ -56,35 +60,38 @@ export default function Header() {
                 height={100}
               />
               <div className="mt-4 flex absolute w-20 container xl:left-3/4  lg:left-3/4 md:left-1/2">
-                <div className="relative">
+                <div
+                  className="relative z-10 cursor-pointer"
+                  onClick={() => navigate("/order")}
+                >
                   <AiOutlineShoppingCart size={30} color="#c97f7f" />
-                  <div className="flex justify-center absolute w-5 h-5 bg-red-200 border-2 border-white text-red-700 rounded-full -translate-y-1 text-xs translate-x-2 top-0 right-0">
-                    1
-                  </div>
+                  {cartData.length > 0 && (
+                    <div className="flex justify-center absolute w-5 h-5 bg-red-200 border-2 border-white text-red-700 rounded-full -translate-y-1 text-xs translate-x-2 top-0 right-0">
+                      <span className="static">{cartData.length}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="absolute">
+                <div className="absolute -ml-2 grid gird-flow-row grid-rows-3">
                   <div className="flex items-center justify-center flex-col container">
-                    <Link to={"/login"}>
-                      {userProfile ? (
-                        <img
-                          className="rounded-full "
-                          src={profile}
-                          width={30}
-                          height={30}
-                          onMouseEnter={() => dispatch(setIsHoverProfile(true))}
-                          onMouseLeave={() =>
-                            dispatch(setIsHoverProfile(false))
-                          }
-                        />
-                      ) : (
+                    {userProfile ? (
+                      <img
+                        className="rounded-full "
+                        src={profile}
+                        width={30}
+                        height={30}
+                        onMouseEnter={() => dispatch(setIsHoverProfile(true))}
+                        onMouseLeave={() => dispatch(setIsHoverProfile(false))}
+                      />
+                    ) : (
+                      <Link to={"/login"}>
                         <img
                           className="rounded-full "
                           src={profile}
                           width={30}
                           height={30}
                         />
-                      )}
-                    </Link>
+                      </Link>
+                    )}
                     <DropDownProfileBox />
                   </div>
                 </div>

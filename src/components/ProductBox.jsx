@@ -1,25 +1,28 @@
 import { useState } from "react";
 import Modal from "../components/Modal";
 import ProductHover from "../features/products/ProductHover";
+import { resetSelected } from "../stores/productSlice";
 // import { setHover } from "../stores/productSlice";
-// import { useDispatch, useSelector } from "react-redux";
-export default function ProductBox({ products }) {
+import { useDispatch} from "react-redux";
+export default function ProductBox({ product }) {
   const [isHover, setIsHover] = useState(false);
   // const {isHover} = useSelector(state=>state.products)
   const [isOpen, setIsOpen] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleOpen = () => {
     // console.log("eiei2");
     setIsOpen(true);
   };
-  const handleClose = (e) => {
-    e.stopPropagation();
-    setIsOpen(() => false);
-  };
   let div = document.querySelector("body");
-  // let html = document.querySelector('html')
-  div.style.overflowY = isOpen ? "hidden" : "auto";
-  // html.style.cssText = isOpen? '100vw':''
+  div.style.overflowY = isOpen ? "hidden" : "unset";
+  const handleClose = (e) => {
+    // e.stopPropagation();
+    div.style.overflowY = 'unset' // in-case redirect when click (add to cart, buy now, add favourite) not authenticated
+    console.log('eiei')
+    dispatch(resetSelected())
+    setIsOpen(false);
+  };
+  // console.log(product)
   return (
     <>
       <div
@@ -32,19 +35,19 @@ export default function ProductBox({ products }) {
           <img
             src={
               !isHover
-                ? products.Images[0].image
-                : products.Images[1]?.image
-                ? products.Images[1].image
-                : products.Images[0].image
+                ? product.Images[0].image
+                : product.Images[1]?.image
+                ? product.Images[1].image
+                : product.Images[0].image
             }
             className={`w-full h-52 object-fill `}
           />
           <ProductHover isHover={isHover} />
         </div>
-        <p className="text-gray-800 px-2 mt-3">{products.name}</p>
-        <p className="text-gray-500 px-2 mb-3">฿ {products.price}</p>
+        <p className="text-gray-800 px-2 mt-3">{product.name}</p>
+        <p className="text-gray-500 px-2 mb-3">฿ {product.price}</p>
       </div>
-      {isOpen && <Modal onClose={handleClose} products={products} />}
+      {isOpen && <Modal onClose={handleClose} product={product} />}
     </>
   );
 }

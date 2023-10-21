@@ -5,10 +5,11 @@ const userSlice = createSlice({
   initialState: {
     userProfile: null,
     isHoverProfile: false,
+    cartData: [],
   },
   reducers: {
     setUserProfile: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.userProfile = action.payload;
     },
     setIsHoverProfile: (state, action) => {
@@ -18,15 +19,30 @@ const userSlice = createSlice({
       state.userProfile = null;
       state.isHoverProfile = false;
     },
+    fetchCartData: (state, action) => {
+      state.cartData = [...action.payload];
+    },
+    resetCartData: (state, action) => {
+      state.cartData = [];
+    },
+    updateCartData: (state, action) => {
+      console.log(action.payload);
+      state.cartData.unshift(action.payload);
+    },
   },
 });
 
 export default userSlice.reducer;
 
-export const { setUserProfile, setIsHoverProfile, userLogout } =
-  userSlice.actions;
+export const {
+  setUserProfile,
+  setIsHoverProfile,
+  userLogout,
+  fetchCartData,
+  resetCartData,
+  updateCartData,
+} = userSlice.actions;
 
-
-export const handleHoverProfile = (status) => dispatch => {
-  dispatch(setIsHoverProfile(status))
-}
+export const handleHoverProfile = (status) => (dispatch) => {
+  dispatch(setIsHoverProfile(status));
+};

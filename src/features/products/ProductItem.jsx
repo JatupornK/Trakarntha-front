@@ -11,7 +11,7 @@ export default function ProductItem() {
     dispatch(fetchProducts());
   }, []);
 
-
+// console.log(products)
 
 // flex flex-wrap
   // console.log(products)
@@ -19,7 +19,7 @@ export default function ProductItem() {
     <>
       <div className=" gap-x-5 grid grid-cols-3">
         {products.map((item) => {
-          return <ProductBox key={item.id} products={item}/>;
+          return <ProductBox key={item.id} product={item}/>;
         })}
       </div>
       {/* {isOpen && <Modal onClose={()=>setIsOpen(false)} image={products} />} */}

@@ -11,7 +11,9 @@ const productSlice = createSlice({
     textCategory: "All",
     filter: [],
     slide: 0,
-    size: [],
+    size: [], //filter size
+    selectedSize: "", //select size (modal)
+    quantity: 1,
     // isHover: []
   },
   reducers: {
@@ -20,8 +22,8 @@ const productSlice = createSlice({
       state.filter = [true, false, false];
       state.textSort = "Sort by";
       state.size = [];
-      state.slide = action.payload
-      state.textCategory = 'All'
+      state.slide = action.payload;
+      state.textCategory = "All";
     },
     setSlide: (state, action) => {
       state.slide = action.payload;
@@ -67,7 +69,7 @@ const productSlice = createSlice({
     },
     filterAll: (state, action) => {
       //action payload (filter)
-      console.log(action.payload);
+      // console.log(action.payload);
       if (action.payload.type === "price") {
         state.slide = action.payload.value;
       } else if (action.payload.type === "type") {
@@ -115,7 +117,7 @@ const productSlice = createSlice({
           let isInclude = false;
           if (item.ProductSizes.length > 0)
             for (let i = 0; i < item.ProductSizes.length; i++) {
-              console.log(Object.values(item.ProductSizes[i])[1].size);
+              // console.log(Object.values(item.ProductSizes[i])[1].size);
               if (
                 state.size.includes(Object.values(item.ProductSizes[i])[1].size)
               ) {
@@ -129,6 +131,22 @@ const productSlice = createSlice({
       state.products = state.products.filter(
         (item) => item.price >= state.slide
       );
+    },
+    setSelectedSize: (state, action) => {
+      // console.log(action.payload)
+      state.selectedSize = action.payload;
+    },
+    increaseQuantity: (state, action) => {
+      state.quantity = state.quantity + 1;
+    },
+    decreaseQuantity: (state, action) => {
+      if (state.quantity > 1) {
+        state.quantity = state.quantity - 1;
+      }
+    },
+    resetSelected: (state, action) => {
+      state.quantity = 1;
+      state.selectedSize = "";
     },
     // setHover: (state, action) => {
     //   state.isHover[action.payload] = !state.isHover[action.payload]
@@ -147,6 +165,10 @@ export const {
   setSlide,
   filterAll,
   sortAll,
+  setSelectedSize,
+  increaseQuantity,
+  decreaseQuantity,
+  resetSelected
   // setHover
 } = productSlice.actions; //destructuring from productSlice
 
@@ -206,5 +228,3 @@ export const getMaxMinPrice = () => async (dispatch) => {
     console.log("Cann't get a max min price");
   }
 };
-
-

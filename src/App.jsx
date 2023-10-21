@@ -2,8 +2,12 @@ import "./App.css";
 import Router from "./routes/Router";
 import { ToastContainer } from "react-toastify";
 function App() {
-  // let div = document.querySelector("body");
-  // div.style.overflowX = 'hidden'
+  const getScrollbarWidth = () => {
+    return window.innerWidth - document.documentElement.clientWidth;
+  }
+  const scrollBarWidth = getScrollbarWidth();
+  const body = document.querySelector('body');
+  body.style.paddingRight = scrollBarWidth+'px'
   return (
     <>
       <Router />
