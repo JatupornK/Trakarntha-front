@@ -10,7 +10,7 @@ import Header from "../layouts/Header";
 import LoginPage from "../pages/LoginPage";
 import RedirectIfNotAuthenticate from "../features/Login/RedirectIfNotAuthenticate";
 import RedirectIfAuthenticate from "../features/Login/RedirectIfAuthenticate";
-import OrderPage from "../pages/OrderPage";
+import CartPage from "../pages/CartPage";
 
 const router = createBrowserRouter([
   {
@@ -57,10 +57,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/order",
+        path: "/cart",
         element: (
           <RedirectIfNotAuthenticate>
-            <OrderPage />
+            <CartPage />
           </RedirectIfNotAuthenticate>
         ),
       },

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import ProductHover from "../features/products/ProductHover";
 import { resetSelected } from "../stores/productSlice";
 // import { setHover } from "../stores/productSlice";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 export default function ProductBox({ product }) {
   const [isHover, setIsHover] = useState(false);
   // const {isHover} = useSelector(state=>state.products)
@@ -14,12 +14,12 @@ export default function ProductBox({ product }) {
     setIsOpen(true);
   };
   let div = document.querySelector("body");
-  div.style.overflowY = isOpen ? "hidden" : "unset";
-  const handleClose = (e) => {
-    // e.stopPropagation();
-    div.style.overflowY = 'unset' // in-case redirect when click (add to cart, buy now, add favourite) not authenticated
-    console.log('eiei')
-    dispatch(resetSelected())
+  useEffect(() => {
+    div.style.overflowY = isOpen ? "hidden" : "unset";
+  }, [isOpen]);
+  const handleClose = () => {
+    div.style.overflowY = "unset"; // in-case redirect when click (add to cart, buy now, add favourite) not authenticated
+    dispatch(resetSelected());
     setIsOpen(false);
   };
   // console.log(product)
@@ -45,7 +45,9 @@ export default function ProductBox({ product }) {
           <ProductHover isHover={isHover} />
         </div>
         <p className="text-gray-800 px-2 mt-3">{product.name}</p>
-        <p className="text-gray-500 px-2 mb-3">฿ {product.price}</p>
+        <p className="text-gray-500 px-2 mb-3">
+          ฿ {product.price.toLocaleString()}
+        </p>
       </div>
       {isOpen && <Modal onClose={handleClose} product={product} />}
     </>

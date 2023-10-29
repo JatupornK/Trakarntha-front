@@ -1,5 +1,5 @@
 .scroll-up {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -7,6 +7,7 @@
   background-color: #ffffff ;
   transition: 1s cubic-bezier(0.22, 1, 0.36, 1);
   transform: none;
+  overflow-y: hidden;
 }
 
 .scroll-down {
@@ -14,21 +15,13 @@
   transform: translate3d(0, -360%, 0) translateZ(0)
 }
 
-.up {
-  display: inline-flex;
-  opacity: 0;
-  transform: translate3d(0, -20px, 0);
-  transition: 0.1s ease-in-out;
-}
-
-.down {
-  display: inline-flex;
-  opacity: 0;
-  transform: translate3d(0, 20px, 0);
-}
-.static {
-  display: inline-flex;
-  opacity: 1;
-  transform: translate3d(0, 0px, 0);
-  transition: 0.1s ease-in-out;
-}
+/* .start {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 30;
+  background-color: #ffffff ;
+  transition: 10s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: none;
+} */

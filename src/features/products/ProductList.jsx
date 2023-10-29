@@ -3,7 +3,7 @@ import ProductSort from "./ProductSort";
 
 export default function ProductList () {
     return (
-        <div className="w-8/12 ">
+        <div className="w-8/12 container">
             <ProductSort />
             <ProductItem />
         </div>

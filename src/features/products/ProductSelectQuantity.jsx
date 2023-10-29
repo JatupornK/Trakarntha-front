@@ -1,7 +1,6 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { decreaseQuantity, increaseQuantity } from "../../stores/productSlice";
-import "../../App.css";
 export default function ProductSelectQuantity() {
   const { quantity } = useSelector((state) => state.products);
   const dispatch = useDispatch();
@@ -10,11 +9,11 @@ export default function ProductSelectQuantity() {
   // console.log(quantity)
   return (
     <>
-      <div className="flex flex-row mt-4">
+      <div className="flex flex-row mt-4 cursor-pointer">
         <label htmlFor="quantity" className="text-xl mr-3">
           Quantity :
         </label>
-        <div className="flex items-center border border-gray-400 w-fit">
+        <div className="flex items-center border border-gray-400 w-fit ">
           <AiOutlineMinus
             color={`${quantity === 1 ? "BDB7B7" : ""}`}
             onClick={() => dispatch(decreaseQuantity())}
@@ -22,12 +21,12 @@ export default function ProductSelectQuantity() {
             className="border-r border-gray-400 p-1 hover:bg-gray-200"
           />
           <input
-            className="bg-transparent w-10 text-center text-lg static"
+            className="bg-transparent w-10 text-center text-lg cursor-pointer"
             name="quantity"
             id="quantity"
             disabled
             value={quantity}
-          ></input>
+          />
           <AiOutlinePlus
             onClick={() => dispatch(increaseQuantity())}
             size={29.6}

@@ -1,5 +1,5 @@
-export default function ButtonSubmitForm ({text,cName}) {
+export default function ButtonSubmitForm ({text,cName, onClick}) {
     return (
-        <button type="submit" className={cName}>{text}</button>
+        <button onClick={onClick} className={cName}>{text}</button>
     )
 }

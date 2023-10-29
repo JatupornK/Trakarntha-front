@@ -1,32 +1,55 @@
 import { AiOutlineClose } from "react-icons/ai";
 import ProductSelect from "../features/products/ProductSelect";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setBuyNow } from "../stores/userSlice";
+// import { AiFillCaretRight, AiFillCaretLeft } from "react-icons/ai";
 export default function Modal({ onClose, product }) {
+  const [imageShow, setImageShow] = useState(0);
+  const dispatch = useDispatch()
+  const handleChangeImageShow = () => {
+    // if (status === "right") {
+    if (imageShow + 1 > product.Images.length - 1) {
+      return setImageShow(0);
+    } else if (imageShow - 1 < 0) {
+      return setImageShow(product.Images.length - 1);
+    } else {
+      return setImageShow(imageShow + 1);
+    }
+  };
+  useEffect(()=>{
+    dispatch(setBuyNow({}))
+  },[])
   // console.log(product);
   return (
     <>
       <div className="fixed left-0 top-0 h-full w-full z-50">
         <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-50"></div>
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="relative w-screen flex justify-center items-center h-screen">
-            <div className="absolute bg-white container 2xl:w-4/6 xl:w-4/5   opacity-100 grid grid-flow-col grid-cols-12 ">
-              <div className=" col-span-7">
-                <div className="p-5">
-                  <img
-                    src={product.Images[0].image}
-                    className={`object-fill`}
-                  />
+          <div className="relative w-screen h-screen">
+            <div className="bg-white container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 2xl:w-4/6 xl:w-4/5 h-4/6 opacity-100 grid grid-flow-col grid-cols-12 ">
+              <div
+                className="p-4 pb-8 col-span-7 min-h-0 min-w-0 w-full h-full relative"
+                onClick={handleChangeImageShow}
+              >
+                <div className=" absolute text-center text-xs bottom-0 w-full -ml-4 mb-2">
+                  Click the image to see another pictures.
                 </div>
+                <img
+                  src={product.Images[imageShow].image}
+                  className={`object-fill cursor-pointer block h-full w-full`}
+                  onClick={handleChangeImageShow}
+                />
               </div>
-              <div className="col-span-5 py-10 break-normal pr-10 whitespace-normal">
+              <div className="relative col-span-5 py-5 break-normal pr-10 whitespace-normal h-full min-w-0 min-h-0">
                 <div className="text-4xl font-bold">{product.name}</div>
-                <div className="mt-3 text-lg max-h-36 text-ellipsis overflow-hidden">{product.description}</div>
-                <h3 className="mt-3 text-2xl">฿ {product.price}</h3>
+                <div className="mt-3 text-lg max-h-36 text-ellipsis overflow-hidden ">
+                  {product.description}
+                </div>
+                <h3 className="mt-3 text-2xl">฿ {product.price.toLocaleString()}</h3>
                 <ProductSelect
                   product={product}
                   onClose={onClose}
-                  // list={product.ProductSizes}
-                  // name={product.name}
-                  // price={product.price}
                 />
                 <div className="flex w-full justify-center mt-2">
                   <a
@@ -36,13 +59,13 @@ export default function Modal({ onClose, product }) {
                     View more details
                   </a>
                 </div>
+                <AiOutlineClose
+                  size={45}
+                  color="gray"
+                  className="absolute right-1 top-2 hover:bg-gray-100 rounded-2xl p-1 mr-2 cursor-pointer"
+                  onClick={onClose}
+                />
               </div>
-              <AiOutlineClose
-                size={45}
-                color="gray"
-                className="absolute right-1 top-2 hover:bg-gray-100 rounded-2xl p-1 mr-2"
-                onClick={onClose}
-              />
             </div>
           </div>
         </div>

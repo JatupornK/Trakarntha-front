@@ -17,7 +17,7 @@ export default function ProductItem() {
   // console.log(products)
   return (
     <>
-      <div className=" gap-x-5 grid grid-cols-3">
+      <div className="container gap-x-5 grid md:grid-cols-2 lg:grid-cols-3 ">
         {products.map((item) => {
           return <ProductBox key={item.id} product={item}/>;
         })}

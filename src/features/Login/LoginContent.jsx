@@ -77,9 +77,9 @@ export default function LoginContent() {
             className="absolute right-2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
           >
             {!showPassword.login ? (
-              <FaRegEyeSlash size={20} />
+              <FaRegEyeSlash size={20} className="cursor-pointer" />
             ) : (
-              <FaRegEye size={20} />
+              <FaRegEye size={20} className="cursor-pointer" />
             )}
           </div>
           <label
