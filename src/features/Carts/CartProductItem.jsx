@@ -12,6 +12,7 @@ export default function CartProductItem() {
   //   let cartShow = cartData.reduce((acc, item) => {
   //   }, []);
   //   console.log(cartShow);
+  // console.log(cartData)
   return (
     <>
       {cartData.map((item, idx) => (
@@ -48,7 +49,6 @@ export default function CartProductItem() {
                   <input
                     className="bg-transparent w-8 text-center text-sm cursor-pointer"
                     name="quantity"
-                    id="quantity"
                     disabled
                     value={+item.amount}
                   />

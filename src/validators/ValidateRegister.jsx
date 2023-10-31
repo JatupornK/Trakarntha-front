@@ -45,6 +45,7 @@ const validateRegister = (input) => {
   const { error } = registerSchema.validate(input, {
     abortEarly: false, // ทำการ validate ทุกตัว if false
   });
+  console.dir(error)
   if (error) {
     const newError = error.details.reduce((acc, el) => {
       acc[el.context.label] = el.message;

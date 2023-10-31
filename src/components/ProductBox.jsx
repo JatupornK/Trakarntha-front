@@ -2,13 +2,28 @@ import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import ProductHover from "../features/products/ProductHover";
 import { resetSelected } from "../stores/productSlice";
-// import { setHover } from "../stores/productSlice";
 import { useDispatch } from "react-redux";
+import ProductModalContent from "../features/products/ProductModalContent";
+import { setBuyNow } from "../stores/userSlice";
+
 export default function ProductBox({ product }) {
   const [isHover, setIsHover] = useState(false);
-  // const {isHover} = useSelector(state=>state.products)
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const [imageShow, setImageShow] = useState(0);
+
+  const handleChangeImageShow = () => {
+    if (imageShow + 1 > product.Images.length - 1) {
+      return setImageShow(0);
+    } else if (imageShow - 1 < 0) {
+      return setImageShow(product.Images.length - 1);
+    } else {
+      return setImageShow(imageShow + 1);
+    }
+  };
+  useEffect(() => {
+    dispatch(setBuyNow({}));
+  }, []);
   const handleOpen = () => {
     // console.log("eiei2");
     setIsOpen(true);
@@ -49,7 +64,17 @@ export default function ProductBox({ product }) {
           ฿ {product.price.toLocaleString()}
         </p>
       </div>
-      {isOpen && <Modal onClose={handleClose} product={product} />}
+      {/* {isOpen && <Modal onClose={handleClose} product={product} />} */}
+      {isOpen && (
+        <Modal width={'2xl:w-4/6 xl:w-4/5'}>
+          <ProductModalContent
+            imageShow={imageShow}
+            onClose={handleClose}
+            product={product}
+            handleChangeImageShow={handleChangeImageShow}
+          />
+        </Modal>
+      )}
     </>
   );
 }

@@ -17,7 +17,7 @@ export default function RegisterContent() {
   );
   const dispatch = useDispatch();
 
-  // console.log(registerError)
+  console.log(registerError)
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
@@ -44,7 +44,7 @@ export default function RegisterContent() {
 
   return (
     <>
-      <form onSubmit={handleSubmitForm}>
+      <form id="register-form" onSubmit={handleSubmitForm}>
         <div className="relative mt-7">
           <label
             htmlFor="firstName"

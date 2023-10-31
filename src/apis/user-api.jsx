@@ -10,3 +10,5 @@ export const clickIncreaseProductInCart = (input) =>
 
 export const clickDecreaseProductInCart = (input) =>
   axios.patch("/users/cart/decrease", input);
+
+export const createNewAddress = (input) => axios.post("/users/address", input);

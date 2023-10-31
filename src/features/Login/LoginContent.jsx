@@ -5,7 +5,6 @@ import {
   setLoginError,
   setLoginInput,
   setShowPassword,
-  // setUserProfile,
 } from "../../stores/authSlice";
 import { fetchCartData, setUserProfile } from "../../stores/userSlice";
 import * as authApi from "../../apis/auth-api";
@@ -30,8 +29,8 @@ export default function LoginContent() {
         if (res.status === 201) {
           setAccessToken(res.data.accessToken);
           const[user,cart] = await Promise.all([authApi.getMe(),authApi.getUserCartData()])
-          dispatch(fetchCartData(cart.data.productsInCart))
           dispatch(setUserProfile(user.data.user));
+          dispatch(fetchCartData(cart.data.productsInCart))
           navigate("/profile");
         }
       }
@@ -47,17 +46,17 @@ export default function LoginContent() {
   };
   return (
     <>
-      <form onSubmit={handleSubmitForm}>
+      <form id="login-form" onSubmit={handleSubmitForm}>
         <div className="relative mt-7">
           <label
-            htmlFor="email"
+            htmlFor="email-login"
             className="text-gray-400 absolute z-10 text-xs left-4 my-1 top-1"
           >
             Email *
           </label>
           <input
             type="text"
-            id="email"
+            id="email-login"
             name="email"
             className={`border px-4 pt-6 pb-2 w-full text-sm relative ${
               loginError?.email && "border-red-500"
@@ -83,14 +82,14 @@ export default function LoginContent() {
             )}
           </div>
           <label
-            htmlFor="password"
+            htmlFor="password-login"
             className="text-gray-400 absolute z-10 text-xs left-4 my-1 top-1"
           >
             Password *
           </label>
           <input
             type={showPassword.login ? "text" : "password"}
-            id="password"
+            id="password-login"
             name="password"
             className={`border px-4 pt-6 pb-2 w-full text-sm relative ${
               loginError?.password && "border-red-500"

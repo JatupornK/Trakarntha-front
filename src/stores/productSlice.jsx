@@ -14,7 +14,6 @@ const productSlice = createSlice({
     size: [], //filter size
     selectedSize: "", //select size (modal)
     quantity: 1,
-    // isHover: []
   },
   reducers: {
     resetState: (state, action) => {
@@ -169,7 +168,6 @@ export const {
   increaseQuantity,
   decreaseQuantity,
   resetSelected
-  // setHover
 } = productSlice.actions; //destructuring from productSlice
 
 export const fetchProducts = () => async (dispatch) => {

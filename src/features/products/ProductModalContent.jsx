@@ -1,4 +1,12 @@
-export default function ProductModalContent() {
+import ProductSelect from "./ProductSelect";
+import { AiOutlineClose } from "react-icons/ai";
+
+export default function ProductModalContent({
+  onClose,
+  product,
+  handleChangeImageShow,
+  imageShow,
+}) {
   return (
     <>
       <div
