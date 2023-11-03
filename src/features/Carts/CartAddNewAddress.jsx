@@ -15,13 +15,7 @@ export default function CartAddNewAddress() {
     setOpen(true);
   };
 
-  // const handleClose = () => {
-  //   div.style.overflowY = "unset";
-  //   setOpen(false);
-  // };
-
   const handleClickCloseAddNewAddress = () => {
-    // onClose();
     div.style.overflowY = "unset";
     setOpen(false);
     dispatch(resetInputErrorCreateAddress());

@@ -3,6 +3,7 @@ import { validateCreateAddress } from "../../validators/ValidateCreateAddress";
 import {
   setErrorCreateAddress,
   setInputCreateAddress,
+  createNewAddress
 } from "../../stores/userSlice";
 import * as userApi from "../../apis/user-api";
 export default function CartModalAddNewAddress({ onSuccess }) {
@@ -20,6 +21,7 @@ export default function CartModalAddNewAddress({ onSuccess }) {
         const res = await userApi.createNewAddress(inputCreateAddress);
         if (res.status === 201) {
           onSuccess();
+          dispatch(createNewAddress(res.data.message))
         }
       }
     } catch (err) {

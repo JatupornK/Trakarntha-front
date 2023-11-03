@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import CartChooseAddress from "./CartChooseAddress";
+import PaymentContainer from "../Payments/PaymentContainer";
 
 export default function CartOrderSummaryContent() {
   const { cartData } = useSelector((state) => state.user);
@@ -31,6 +32,8 @@ export default function CartOrderSummaryContent() {
       </div>
       <hr className="w-full border-gray border-1"></hr>
       <CartChooseAddress />
+      <hr className="w-full border-gray border-1"></hr>
+      <PaymentContainer price={sumTotalPrice-discount}/>
       <button className="w-full bg-red-600 p-2 text-white hover:bg-red-400">
         Check Out
       </button>

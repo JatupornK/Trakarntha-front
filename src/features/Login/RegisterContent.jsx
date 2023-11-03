@@ -63,6 +63,7 @@ export default function RegisterContent() {
               dispatch(setRegisterInput({ [e.target.name]: e.target.value }))
             }
             value={registerInput.firstName}
+            autoComplete="off"
           />
         </div>
         {registerError.firstName && (
@@ -86,6 +87,7 @@ export default function RegisterContent() {
               dispatch(setRegisterInput({ [e.target.name]: e.target.value }))
             }
             value={registerInput.lastName}
+            autoComplete="off"
           />
         </div>
         {registerError.lastName && (
@@ -109,6 +111,7 @@ export default function RegisterContent() {
               dispatch(setRegisterInput({ [e.target.name]: e.target.value }))
             }
             value={registerInput.mobile}
+            autoComplete="off"
           />
         </div>
         {registerError.mobile && (
@@ -132,6 +135,7 @@ export default function RegisterContent() {
               dispatch(setRegisterInput({ [e.target.name]: e.target.value }))
             }
             value={registerInput.email}
+            autoComplete="off"
           />
         </div>
         {registerError.email && (
@@ -165,6 +169,7 @@ export default function RegisterContent() {
               dispatch(setRegisterInput({ [e.target.name]: e.target.value }))
             }
             value={registerInput.password}
+            autoComplete="off"
           />
         </div>
         {registerError.password && (

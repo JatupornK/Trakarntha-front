@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getAccessToken } from '../utills/localStorage';
 
-axios.defaults.baseURL = import.meta.env.REACT_APP_TRAKARNTHA_DATABASE_URL|| 'http://localhost:8008';
+axios.defaults.baseURL = import.meta.env.VITE_TRAKARNTHA_BASE_URL|| 'http://localhost:8008';
 
 // config interceptor to axios ก่อนที่จะส่ง req หรือรับ res จะต้องผ่าน interceptor => สามารถสั่งให้ทำอะไรก่อนได้
 axios.interceptors.request.use(config=>{

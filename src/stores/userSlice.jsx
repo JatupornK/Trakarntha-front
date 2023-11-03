@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as userApi from "../apis/user-api";
+import { generateCurrentTime } from "../utills/getCurrentTime";
 
 const initialInputCreateAddress = {
   addressTitle: "",
@@ -9,7 +10,10 @@ const initialInputCreateAddress = {
   postCode: "",
   phoneNumber: "",
 };
-
+const initialDefaultPayment = {
+  last4: '',
+  brand: ''
+}
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -19,10 +23,11 @@ const userSlice = createSlice({
     buyNow: {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
     inputCreateAddress: initialInputCreateAddress,
     errorCreateAddress: initialInputCreateAddress,
+    newSelectedAddressId: {id:''},
+    defaultPayment: initialDefaultPayment
   },
   reducers: {
     setUserProfile: (state, action) => {
-      // console.log(action.payload);
       state.userProfile = action.payload;
     },
     setIsHoverProfile: (state, action) => {
@@ -94,6 +99,38 @@ const userSlice = createSlice({
       state.errorCreateAddress = initialInputCreateAddress;
       state.inputCreateAddress = initialInputCreateAddress;
     },
+    createNewAddress: (state,action) => {
+      if(state.userProfile.Addresses.length>0){
+        state.userProfile.Addresses.map((item,idx)=>{
+          if(item.lastest) {
+            state.userProfile.Addresses[idx].lastest=false
+          }
+        })
+        state.userProfile.Addresses.unshift(action.payload)
+      }else {
+        console.log(action.payload)
+        state.userProfile.Addresses = [action.payload]
+      }
+    },
+    updateSelectedAddress: (state, action) => {
+      // console.log(action.payload)
+      let idx = state.userProfile.Addresses.findIndex(item=>item.lastest===true)
+      console.log(generateCurrentTime())
+      console.log(state.userProfile.Addresses[idx].updatedAt)
+      state.userProfile.Addresses[idx].updatedAt = generateCurrentTime()
+      console.log(state.userProfile.Addresses[idx].updatedAt)
+      state.userProfile.Addresses[idx].lastest=false;
+      idx = state.userProfile.Addresses.findIndex(item=>item.id===action.payload.id)
+      // console.log('idx2',idx)
+      state.userProfile.Addresses[idx].lastest=true
+    },
+    selectNewAddress: (state, action) => {
+      state.newSelectedAddressId = {...action.payload}
+    },
+    setDefaultPayment: (state, action) => {
+      console.log(action.payload)
+      state.defaultPayment = {...state.defaultPayment,...action.payload}
+    }
   },
 });
 
@@ -113,6 +150,10 @@ export const {
   setInputCreateAddress,
   setErrorCreateAddress,
   resetInputErrorCreateAddress,
+  createNewAddress,
+  selectNewAddress,
+  updateSelectedAddress,
+  setDefaultPayment
 } = userSlice.actions;
 
 export const handleHoverProfile = (status) => (dispatch) => {

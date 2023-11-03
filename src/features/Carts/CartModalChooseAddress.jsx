@@ -1,15 +1,38 @@
 import { AiOutlineClose } from "react-icons/ai";
 import CartAddressItem from "./CartAddressItem";
-
-export default function CartModalChooseAddress ({onClose, address}) {
-    return (
-        <div className="min-w-0 min-h-0 col-span-12 grid grid-rows-1">
-        <div className="px-7 py-4 flex flex-col row-span-1">
-          <p className="font-semibold text-xl">My Address</p>
-          <hr className="border-1 border-gray-200 mt-2" />
-          {/* <CartModalAddNewAddress onSuccess={handleClickCloseAddNewAddress} /> */}
-          <CartAddressItem address={address}/>
+import { updateSelectedAddress } from "../../stores/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import * as userApi from '../../apis/user-api';
+export default function CartModalChooseAddress({ onClose, address }) {
+  const dispatch = useDispatch();
+  const {newSelectedAddressId} = useSelector(state=>state.user)
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      onClose();
+      const res = await userApi.chooseNewAddress(newSelectedAddressId);
+      if(res.status===201) {
+        dispatch(updateSelectedAddress(newSelectedAddressId));
+      }
+    } catch (err) {
+      console.log(err)
+      alert(err.message);
+    }
+  };
+  // console.log(address)
+  return (
+    <div className="min-w-0 min-h-0 col-span-12">
+      <div className="grid grid-flow-row grid-rows-8 h-full">
+        <div className="py-4 row-span-1 min-w-0 min-h-0 h-full row-start-1 row-end-2">
+          <p className="font-semibold text-xl text-center">My Address</p>
+          <hr className="border-1 border-gray-200 mt-4" />
         </div>
+        <form
+          onSubmit={handleSubmit}
+          className="row-span-7 h-full row-start-2 row-end-9 min-w-0 min-h-0 grid grid-rows-7"
+        >
+          <CartAddressItem address={address} />
+        </form>
         <AiOutlineClose
           size={40}
           color="gray"
@@ -17,5 +40,6 @@ export default function CartModalChooseAddress ({onClose, address}) {
           onClick={onClose}
         />
       </div>
-    )
+    </div>
+  );
 }

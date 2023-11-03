@@ -65,6 +65,7 @@ export default function LoginContent() {
               dispatch(setLoginInput({ [e.target.name]: e.target.value }))
             }
             value={loginInput.email}
+            // autoComplete="off"
           />
         </div>
         {loginError?.email && (
@@ -98,6 +99,7 @@ export default function LoginContent() {
               dispatch(setLoginInput({ [e.target.name]: e.target.value }))
             }
             value={loginInput.password}
+            autoComplete="off"
           />
         </div>
         {loginError?.password && (
