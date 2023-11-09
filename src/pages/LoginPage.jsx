@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import LoginContainer from "../features/Login/LoginContainer";
-// import { useDispatch } from "react-redux";
-// import { resetRegisterLoginInput } from "../stores/authSlice";
+
 
 export default function LoginPage () {
-    // const dispatch = useDispatch();
-    // dispatch(resetRegisterLoginInput());
+    useEffect(() => {
+        window.scrollTo(0, 0); // Scroll to the top when the component mounts
+      }, []);
     return (
         <>
             <LoginContainer />

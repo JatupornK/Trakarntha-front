@@ -4,29 +4,39 @@ import { AiOutlineCreditCard } from "react-icons/ai";
 import { useEffect } from "react";
 import * as userApi from "../../apis/user-api";
 import { useDispatch } from "react-redux";
-import { setDefaultPayment } from "../../stores/userSlice";
+import {
+  selectNewDefaultPayment,
+  setAllUserPaymentMethods,
+  setDefaultPayment,
+} from "../../stores/userSlice";
 import PaymentContent from "./PaymentContent";
+import PaymentChangePayment from "./PaymentChangePayment";
 
 export default function PaymentContainer({ price }) {
   const dispatch = useDispatch();
-  const { defaultPayment } = useSelector((state) => state.user);
-
+  const { defaultPayment, userProfile } = useSelector((state) => state.user);
+  // console.log(defaultPayment);
+  console.log(price)
   useEffect(() => {
     const fetchUserPaymentMethod = async () => {
       try {
-        const {
-          data: { last4, brand, allPaymentMethods },
-        } = await userApi.getLastFour();
-        if (!last4 || !brand || !allPaymentMethods)
-          throw new Error("Can not load user payment");
-        dispatch(setDefaultPayment({ last4, brand }));
+        if (userProfile.stripeCustomerId) {
+          const {
+            data: { lastestPayment, allPaymentMethods },
+          } = await userApi.getLastFour();
+          if (!lastestPayment || !allPaymentMethods) {
+            throw new Error("Can not load user payment");
+          }
+          dispatch(setDefaultPayment(lastestPayment));
+          dispatch(setAllUserPaymentMethods(allPaymentMethods));
+          dispatch(selectNewDefaultPayment(lastestPayment.id))
+        }
       } catch (err) {
         console.log(err.message);
       }
     };
     fetchUserPaymentMethod();
   }, []);
-
   return (
     <div className="py-5">
       <div className="flex gap-2 text-lg items-center font-semibold">
@@ -36,8 +46,10 @@ export default function PaymentContainer({ price }) {
       {defaultPayment.last4 && defaultPayment.brand && (
         <PaymentContent defaultPayment={defaultPayment} />
       )}
-
-      <CartAddPaymentMethod price={price} />
+      <div className="flex flex-row justify-between">
+        <CartAddPaymentMethod price={price} />
+        <PaymentChangePayment />
+      </div>
     </div>
   );
 }

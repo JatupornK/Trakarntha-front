@@ -1,10 +1,10 @@
-// import useProduct from "../hooks/useProduct"
+import { useEffect } from "react";
 import ProductContainer from "../features/products/ProductContainer";
 
 export default function AllProductPage() {
-
-  // const {products} = useProduct();
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top when the component mounts
+  }, []);
   return (
     <ProductContainer />
   )

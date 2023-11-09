@@ -30,7 +30,7 @@ export default function ProductSelect({ product, onClose }) {
       try {
         e.preventDefault();
         const res = await userApi.addProductToCart(input);
-        // console.log(res)
+        console.log(res)
         if (res.status === 201) {
           onClose();
           // console.log(res)

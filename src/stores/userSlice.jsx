@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as userApi from "../apis/user-api";
-import { generateCurrentTime } from "../utills/getCurrentTime";
+import { generateCurrentTime, getTimeStamp } from "../utills/getCurrentTime";
 
 const initialInputCreateAddress = {
   addressTitle: "",
@@ -11,9 +11,11 @@ const initialInputCreateAddress = {
   phoneNumber: "",
 };
 const initialDefaultPayment = {
-  last4: '',
-  brand: ''
-}
+  last4: "",
+  brand: "",
+  updatedAt: "",
+  id: "",
+};
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -23,11 +25,15 @@ const userSlice = createSlice({
     buyNow: {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
     inputCreateAddress: initialInputCreateAddress,
     errorCreateAddress: initialInputCreateAddress,
-    newSelectedAddressId: {id:''},
-    defaultPayment: initialDefaultPayment
+    newSelectedAddressId: { id: "" },
+    defaultPayment: initialDefaultPayment,
+    userAllPaymentMethods: [],
+    newSelectedPaymentId: { id: "" },
+    orderSuccess: false,
   },
   reducers: {
     setUserProfile: (state, action) => {
+      console.log(action.payload)
       state.userProfile = action.payload;
     },
     setIsHoverProfile: (state, action) => {
@@ -38,6 +44,7 @@ const userSlice = createSlice({
       state.isHoverProfile = false;
     },
     fetchCartData: (state, action) => {
+      console.log(action.payload)
       state.cartData = [...action.payload];
     },
     resetCartData: (state, action) => {
@@ -99,37 +106,84 @@ const userSlice = createSlice({
       state.errorCreateAddress = initialInputCreateAddress;
       state.inputCreateAddress = initialInputCreateAddress;
     },
-    createNewAddress: (state,action) => {
-      if(state.userProfile.Addresses.length>0){
-        state.userProfile.Addresses.map((item,idx)=>{
-          if(item.lastest) {
-            state.userProfile.Addresses[idx].lastest=false
+    createNewAddress: (state, action) => {
+      if (state.userProfile.Addresses.length > 0) {
+        state.userProfile.Addresses.map((item, idx) => {
+          if (item.lastest) {
+            state.userProfile.Addresses[idx].lastest = false;
           }
-        })
-        state.userProfile.Addresses.unshift(action.payload)
-      }else {
-        console.log(action.payload)
-        state.userProfile.Addresses = [action.payload]
+        });
+        state.userProfile.Addresses.unshift(action.payload);
+      } else {
+        console.log(action.payload);
+        state.userProfile.Addresses = [action.payload];
       }
     },
     updateSelectedAddress: (state, action) => {
       // console.log(action.payload)
-      let idx = state.userProfile.Addresses.findIndex(item=>item.lastest===true)
-      console.log(generateCurrentTime())
-      console.log(state.userProfile.Addresses[idx].updatedAt)
-      state.userProfile.Addresses[idx].updatedAt = generateCurrentTime()
-      console.log(state.userProfile.Addresses[idx].updatedAt)
-      state.userProfile.Addresses[idx].lastest=false;
-      idx = state.userProfile.Addresses.findIndex(item=>item.id===action.payload.id)
+      let idx = state.userProfile.Addresses.findIndex(
+        (item) => item.lastest === true
+      );
+      console.log(generateCurrentTime());
+      console.log(state.userProfile.Addresses[idx].updatedAt);
+      state.userProfile.Addresses[idx].updatedAt = generateCurrentTime();
+      console.log(state.userProfile.Addresses[idx].updatedAt);
+      state.userProfile.Addresses[idx].lastest = false;
+      idx = state.userProfile.Addresses.findIndex(
+        (item) => item.id === action.payload.id
+      );
       // console.log('idx2',idx)
-      state.userProfile.Addresses[idx].lastest=true
+      state.userProfile.Addresses[idx].lastest = true;
     },
     selectNewAddress: (state, action) => {
-      state.newSelectedAddressId = {...action.payload}
+      state.newSelectedAddressId = { ...action.payload };
     },
     setDefaultPayment: (state, action) => {
-      console.log(action.payload)
-      state.defaultPayment = {...state.defaultPayment,...action.payload}
+      console.log(action.payload);
+      state.defaultPayment = { ...state.defaultPayment, ...action.payload };
+    },
+    setAllUserPaymentMethods: (state, action) => {
+      console.log(action.payload);
+      state.userAllPaymentMethods = action.payload;
+    },
+    setNewStripeCustomer: (state, action) => {
+      console.log(action.payload);
+      state.userProfile.stripeCustomerId = action.payload;
+    },
+    addNewPayment: (state, action) => {
+      console.log(action.payload);
+      state.userAllPaymentMethods.unshift(action.payload);
+    },
+    selectNewDefaultPayment: (state, action) => {
+      console.log(action.payload);
+      state.newSelectedPaymentId = { ...action.payload };
+    },
+    updateSelectedPayment: (state, action) => {
+      console.log(action.payload);
+      let idx = state.userAllPaymentMethods.findIndex(
+        (item) => item.id === state.defaultPayment.id
+      );
+      state.userAllPaymentMethods[idx].updatedAt = getTimeStamp();
+      idx = state.userAllPaymentMethods.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      state.defaultPayment = state.userAllPaymentMethods[idx];
+    },
+    UpdatePaymentsTime: (state, action) => {
+      console.log(action.payload);
+      const index = action.payload.findIndex(item=>item.stripePaymentId===state.defaultPayment.id)
+      console.log(index)
+      state.defaultPayment.updatedAt = action.payload[index].updatedAt
+      state.userAllPaymentMethods = state.userAllPaymentMethods.map((item1) => {
+        for (let item of action.payload) {
+          if (item1.id === item.stripePaymentId) {
+            return { ...item1, updatedAt: item.updatedAt };
+          }
+        }
+      });
+    },
+    setOrderSuccess: (state, action) => {
+      state.orderSuccess = action.payload
     }
   },
 });
@@ -153,7 +207,14 @@ export const {
   createNewAddress,
   selectNewAddress,
   updateSelectedAddress,
-  setDefaultPayment
+  setDefaultPayment,
+  setAllUserPaymentMethods,
+  setNewStripeCustomer,
+  addNewPayment,
+  selectNewDefaultPayment,
+  updateSelectedPayment,
+  UpdatePaymentsTime,
+  setOrderSuccess
 } = userSlice.actions;
 
 export const handleHoverProfile = (status) => (dispatch) => {
@@ -162,7 +223,7 @@ export const handleHoverProfile = (status) => (dispatch) => {
 
 export const deleteProductFromCart = (cartId) => async (dispatch) => {
   try {
-    const res = await userApi.deleteProductFromCart(cartId);
+    const res = await userApi.deleteProductFromCart({cartId});
     if (res.status === 201) {
       dispatch(clickDeleteProductInCart(cartId));
     }

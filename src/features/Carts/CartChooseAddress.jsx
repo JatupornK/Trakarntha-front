@@ -11,23 +11,25 @@ export default function CartChooseAddress() {
   const lastestAddress = userProfile.Addresses.filter(
     (item) => item.lastest === true
   );
-  useEffect(()=>{
-    console.log(lastestAddress)
-    dispatch(selectNewAddress({id:+lastestAddress[0].id}))
-  },[])
+  useEffect(() => {
+    console.log(lastestAddress);
+    if (userProfile.Addresses.length > 0) {
+      dispatch(selectNewAddress({ id: +lastestAddress[0].id }));
+    }
+  }, []);
   // console.log(userProfile.Addresses)
   return (
     <>
-      {!userProfile.Addresses.length > 0 ? (
-        <div className="py-5">
-          <CartAddNewAddress />
+      <div className="py-5">
+        <div className="flex gap-2 text-lg items-center font-semibold ">
+          <AiOutlineEnvironment size={20} />
+          Delivery Address
         </div>
-      ) : (
-        <div className="py-5">
-          <div className="flex gap-2 text-lg items-center font-semibold ">
-            <AiOutlineEnvironment size={20} />
-            Delivery Address
+        {!userProfile.Addresses.length > 0 ? (
+          <div className="mt-2">
+            <CartAddNewAddress />
           </div>
+        ) : (
           <div className="flex flex-col">
             <CartAddressContent lastestAddress={lastestAddress} />
             <div className="flex justify-between">
@@ -35,8 +37,8 @@ export default function CartChooseAddress() {
               <CartChangeAddress address={userProfile.Addresses} />
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

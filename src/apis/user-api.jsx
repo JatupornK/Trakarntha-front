@@ -3,7 +3,7 @@ import axios from "../configs/axios";
 export const addProductToCart = (input) => axios.post("/users/cart", input);
 
 export const deleteProductFromCart = (cartId) =>
-  axios.delete("/users/cart", { data: { cartId } });
+  axios.patch("/users/cart", cartId);
 
 export const clickIncreaseProductInCart = (input) =>
   axios.patch("/users/cart/increase", input);
@@ -22,3 +22,11 @@ export const createPaymentIntent = (input) => axios.post('/users/stripe/payment-
 export const getLastFour = () => axios.get('/users/stripe/last/payment-method');
 
 export const createUserPayment = (input) => axios.post('/users/payment', input) 
+
+export const chooseNewPayment = (paymentId) => axios.patch('/users/payment/update', paymentId)
+
+export const getUpdatedPaymentTime = () => axios.get('/users/payment/last-update');
+
+export const createOrder = (input) => axios.post('/users/create-order', input)
+
+export const paymentSuccess = (orderId) => axios.patch('/users/payment/success', orderId)

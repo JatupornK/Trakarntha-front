@@ -65,11 +65,11 @@ export default function Header() {
             <div className=" flex justify-center">
               <img
                 className="mt-1"
-                src="../../public/logo.png"
+                src="/logo.png"
                 width={120}
                 height={100}
               />
-              <div className="mt-4 flex absolute w-20 container xl:left-3/4  lg:left-3/4 md:left-1/2">
+              <div className="mt-4 flex absolute w-20 container left-3/4">
                 <div
                   className="relative z-10 cursor-pointer"
                   onClick={() => navigate("/cart")}
@@ -108,7 +108,6 @@ export default function Header() {
               </div>
             </div>
           </div>
-          {/* </div> */}
           <p className="text-red-300 text-6xl font-bold text-center min-w-0 min-h-0 row-span-1 ">
             Trakarntha
           </p>
@@ -119,10 +118,9 @@ export default function Header() {
         <hr className="border-2 border-gray-200" />
       </div>
       <div className="min-vh-10">
-        {/* <div className=""> */}
         <Outlet />
-        {/*พอ render Header แล้วมาเจอ outlet มันจะไปวิ่งหา children ตาม path ปัจจุบัน*/}
       </div>
     </>
   );
 }
+{/*พอ render Header แล้วมาเจอ outlet มันจะไปวิ่งหา children ตาม path ปัจจุบัน*/}
