@@ -11,6 +11,8 @@ import LoginPage from "../pages/LoginPage";
 import RedirectIfNotAuthenticate from "../features/Login/RedirectIfNotAuthenticate";
 import RedirectIfAuthenticate from "../features/Login/RedirectIfAuthenticate";
 import CartPage from "../pages/CartPage";
+import AdminManageMentPage from "../pages/AdminManagementPage";
+import RedirerctIfNotAdmin from "../features/Admins/RedirectIfNotAdmin";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,14 @@ const router = createBrowserRouter([
           <RedirectIfNotAuthenticate>
             <CartPage />
           </RedirectIfNotAuthenticate>
+        ),
+      },
+      {
+        path: "/admin",
+        element: (
+          <RedirerctIfNotAdmin>
+            <AdminManageMentPage />
+          </RedirerctIfNotAdmin>
         ),
       },
     ],

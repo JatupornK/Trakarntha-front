@@ -5,7 +5,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPayment,
+  selectNewDefaultPayment,
   setDefaultPayment,
+  setError,
   setNewStripeCustomer,
 } from "../../stores/userSlice";
 import {toast} from 'react-toastify'
@@ -26,7 +28,7 @@ const CARD_OPTION = {
   },
 };
 
-export default function PaymentForm({ onClose, price }) {
+export default function PaymentForm({ onClose }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
@@ -41,12 +43,11 @@ export default function PaymentForm({ onClose, price }) {
       if (error) {
         throw new Error(error.message);
       }
-      console.log(paymentMethod);
+      dispatch(selectNewDefaultPayment({id:paymentMethod.id}))
       const paymentMethodId = paymentMethod.id;
       // console.log(paymentMethod);
       //if(userProfile not have stripe_customer_id)
       //step2
-      console.log(userProfile);
       let userPayment;
       if (!userProfile.stripeCustomerId) {
         console.log("eiei");
@@ -71,7 +72,7 @@ export default function PaymentForm({ onClose, price }) {
         });
         // console.log(userPayment)
       }
-      console.log(userPayment);
+
       if (userPayment) {
         let newPayment = {
           last4: paymentMethod.card.last4,
@@ -79,8 +80,10 @@ export default function PaymentForm({ onClose, price }) {
           createdAt: paymentMethod.created,
           id: paymentMethod.id
         };
+        dispatch(setError({payment:''}))
         dispatch(setDefaultPayment(newPayment));
         dispatch(addNewPayment(newPayment));
+        // dispatch(selectNewDefaultPayment())
         onClose();
       }
       //step2.2

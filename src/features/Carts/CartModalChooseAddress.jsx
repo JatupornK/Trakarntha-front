@@ -6,6 +6,7 @@ import * as userApi from '../../apis/user-api';
 export default function CartModalChooseAddress({ onClose, address }) {
   const dispatch = useDispatch();
   const {newSelectedAddressId} = useSelector(state=>state.user)
+  console.log(newSelectedAddressId)
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();

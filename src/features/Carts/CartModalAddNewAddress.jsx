@@ -3,7 +3,9 @@ import { validateCreateAddress } from "../../validators/ValidateCreateAddress";
 import {
   setErrorCreateAddress,
   setInputCreateAddress,
-  createNewAddress
+  createNewAddress,
+  setError,
+  selectNewAddress
 } from "../../stores/userSlice";
 import * as userApi from "../../apis/user-api";
 export default function CartModalAddNewAddress({ onSuccess }) {
@@ -22,6 +24,8 @@ export default function CartModalAddNewAddress({ onSuccess }) {
         if (res.status === 201) {
           onSuccess();
           dispatch(createNewAddress(res.data.message))
+          dispatch(setError({address:''}))
+          dispatch(selectNewAddress({id:res.data.message.id}))
         }
       }
     } catch (err) {

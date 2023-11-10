@@ -15,7 +15,13 @@ const initialDefaultPayment = {
   brand: "",
   updatedAt: "",
   id: "",
+  lastest: '',
+  // userPaymentId:
 };
+const initialError = {
+  address: '',
+  payment: '',
+}
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -30,6 +36,7 @@ const userSlice = createSlice({
     userAllPaymentMethods: [],
     newSelectedPaymentId: { id: "" },
     orderSuccess: false,
+    haveAddressPayment: initialError
   },
   reducers: {
     setUserProfile: (state, action) => {
@@ -136,6 +143,7 @@ const userSlice = createSlice({
       state.userProfile.Addresses[idx].lastest = true;
     },
     selectNewAddress: (state, action) => {
+      console.log(action.payload)
       state.newSelectedAddressId = { ...action.payload };
     },
     setDefaultPayment: (state, action) => {
@@ -177,13 +185,17 @@ const userSlice = createSlice({
       state.userAllPaymentMethods = state.userAllPaymentMethods.map((item1) => {
         for (let item of action.payload) {
           if (item1.id === item.stripePaymentId) {
-            return { ...item1, updatedAt: item.updatedAt };
+            return { ...item1, updatedAt: item.updatedAt, lastest: item.lastest };
           }
         }
       });
     },
     setOrderSuccess: (state, action) => {
       state.orderSuccess = action.payload
+    },
+    setError: (state, action) => {
+      console.log(action.payload)
+      state.haveAddressPayment = {...state.haveAddressPayment,...action.payload}
     }
   },
 });
@@ -214,7 +226,8 @@ export const {
   selectNewDefaultPayment,
   updateSelectedPayment,
   UpdatePaymentsTime,
-  setOrderSuccess
+  setOrderSuccess,
+  setError
 } = userSlice.actions;
 
 export const handleHoverProfile = (status) => (dispatch) => {

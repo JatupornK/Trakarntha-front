@@ -6,14 +6,14 @@ export default function PaymentItem() {
   const { defaultPayment, userAllPaymentMethods } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 //   console.log(defaultPayment);
-console.log(userAllPaymentMethods, defaultPayment)
+// console.log(userAllPaymentMethods, defaultPayment)
   const compareFn = (a, b) => {
     return a.updatedAt < b.updatedAt ? 1 : -1;
   };
   let userPaymentMethods = userAllPaymentMethods.filter(
     (item) => item.id !== defaultPayment.id
   );
-  console.log(defaultPayment)
+  // console.log(defaultPayment)
   useEffect(() => {
     let lastest = document.getElementById(`${defaultPayment.id}`);
     lastest.checked = true;

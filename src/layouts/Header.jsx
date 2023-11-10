@@ -23,7 +23,7 @@ export default function Header() {
     // console.dir(ref.current.style)
     let headerRelative = document.querySelector('.headerRelative')
     headerRelative.style.height = ref.current.offsetHeight+'px'
-    dispatch(fetchUserData());
+    dispatch(fetchUserData());//fetch when have token no need to login again
   }, []);
   useEffect(() => {
     let lastScrollY = window.pageYOffset;

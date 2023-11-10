@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { selectNewAddress } from "../../stores/userSlice";
 export default function CartChooseAddress() {
-  const { userProfile } = useSelector((state) => state.user);
+  const { userProfile, haveAddressPayment } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const lastestAddress = userProfile.Addresses.filter(
     (item) => item.lastest === true
@@ -17,7 +17,6 @@ export default function CartChooseAddress() {
       dispatch(selectNewAddress({ id: +lastestAddress[0].id }));
     }
   }, []);
-  // console.log(userProfile.Addresses)
   return (
     <>
       <div className="py-5">
@@ -38,6 +37,7 @@ export default function CartChooseAddress() {
             </div>
           </div>
         )}
+        {haveAddressPayment.address && <div className="text-xs text-red-600 mt-2 text-center">{haveAddressPayment.address}</div>}
       </div>
     </>
   );

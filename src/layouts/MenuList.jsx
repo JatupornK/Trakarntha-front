@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import List from "./List";
 
 const menuList = [
@@ -12,14 +13,17 @@ const menuList = [
   { link: "/all-products", title: "All Product" },
   { link: "/our-story", title: "Our Story" },
   { link: "/membership", title: "Membership" },
-  { link: "/", title: "More" },
+  { link: '/', title:'More'}
 ];
 export default function MenuList() {
+  const {userProfile} = useSelector(state=> state.user);
+  
   return (
     <>
       {menuList.map((item, idx) => (
         <List key={item.title} link={item.link} title={item.title} idx={idx} />
       ))}
+      {userProfile && userProfile.role==='admin'&& <List link={'/admin'} title={'Admin Management'} />}
     </>
   );
 }

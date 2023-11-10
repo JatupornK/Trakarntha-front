@@ -4,45 +4,55 @@ import CartChooseAddress from "./CartChooseAddress";
 import PaymentContainer from "../Payments/PaymentContainer";
 import * as userApi from "../../apis/user-api";
 import { useStripe } from "@stripe/react-stripe-js";
-import { resetCartData, setOrderSuccess, setUserProfile } from "../../stores/userSlice";
+import {
+  resetCartData,
+  setError,
+  setOrderSuccess,
+  setUserProfile,
+} from "../../stores/userSlice";
 
 export default function CartOrderSummaryContent() {
   const { cartData } = useSelector((state) => state.user);
+  // const [isError, setIsError] = useState({address:'',payment:''});
   // const [isUsePromo, setIsUsePromo] = useState(false); //ต้องทำโปรโมด้วย
   const { newSelectedAddressId, defaultPayment, userProfile } = useSelector(
     (state) => state.user
   );
   const stripe = useStripe();
   const dispatch = useDispatch();
-    console.log(cartData)
+  // console.log(cartData);
   let sumTotalPrice = cartData.reduce((acc, item) => {
     return acc + +item.sumPrice;
   }, 0);
   let discount;
   let sumAfterDiscount;
-  if(userProfile.Membership!==null){
-    discount = 0.1
-    sumAfterDiscount = sumTotalPrice-(sumTotalPrice*discount)
+  if (userProfile.Membership !== null) {
+    discount = 0.1;
+    sumAfterDiscount = sumTotalPrice - sumTotalPrice * discount;
   }
-  // let discount = 5000;
-  // let price = sumTotalPrice - discount;
-  console.log(defaultPayment, userProfile);
-  // console.log(newSelectedAddressId);
-
   const handleClickCheckout = async () => {
     try {
+      if(userProfile.Addresses.length===0||defaultPayment.id===''){
+        if(defaultPayment.id===''){
+          dispatch(setError({payment: 'Please add the payment before check out'}))
+        }
+        if(userProfile.Addresses.length===0){
+          dispatch(setError({address: 'Please add the address before check out'}))
+        }
+        throw new Error('Fail ja')
+      }
       //create payment intent
       const currency = "thb";
-      const amount = discount? sumAfterDiscount:sumTotalPrice
+      const amount = discount ? sumAfterDiscount : sumTotalPrice;
       const paymentIntentRes = await userApi.createPaymentIntent({
-        amount:amount*100,
+        amount: amount * 100,
         currency,
         paymentMethodId: defaultPayment.id,
         customerId: userProfile.stripeCustomerId,
       });
-      let clientSecret;
+      let paymentIntentId;
       if (paymentIntentRes.status === 201) {
-        clientSecret = paymentIntentRes.data.paymentIntent;
+        paymentIntentId = paymentIntentRes.data.paymentIntentId;
       }
 
       //create order in database
@@ -53,7 +63,7 @@ export default function CartOrderSummaryContent() {
       });
       //check payment status
       const { paymentIntent, error2 } = await stripe.confirmCardPayment(
-        clientSecret,
+        paymentIntentId,
         { payment_method: defaultPayment.id }
       );
       if (error2) {
@@ -63,12 +73,14 @@ export default function CartOrderSummaryContent() {
         const res = await userApi.paymentSuccess({
           orderId: order.data.orderId,
           totalBought: userProfile.totalBought,
-          sumTotalPrice: amount
+          sumTotalPrice: amount,
         });
         if (res.status === 201) {
-          console.log(res)
-          let totalBought = {totalBought:userProfile.totalBought+amount}
-          dispatch(setUserProfile({...userProfile, ...res.data, ...totalBought}))
+          console.log(res);
+          let totalBought = { totalBought: userProfile.totalBought + amount };
+          dispatch(
+            setUserProfile({ ...userProfile, ...res.data, ...totalBought })
+          );
           dispatch(resetCartData());
           dispatch(setOrderSuccess(true));
         }
@@ -80,33 +92,36 @@ export default function CartOrderSummaryContent() {
 
   return (
     <div className="w-full">
-      <div
-        className={`flex justify-between p-1 ${discount ? "pt-5" : "py-5"}`}
-      >
+      <div className={`flex justify-between p-1 ${discount ? "pt-5" : "py-5"}`}>
         <p>Subtotal</p>
         <p>฿ {sumTotalPrice.toLocaleString()}</p>
       </div>
       {discount && (
         <div className="flex justify-between p-1 py-5">
           <p>Exclusive Membership</p>
-          <p>- ฿ {(sumTotalPrice*discount).toLocaleString()}</p>
+          <p>- ฿ {(sumTotalPrice * discount).toLocaleString()}</p>
         </div>
       )}
       <hr className="w-full border-gray border-1"></hr>
       <div className="text-xl text-center flex justify-between p-1 py-5">
         <p>Total: </p>
-        <p>฿ {discount? sumAfterDiscount.toLocaleString():sumTotalPrice.toLocaleString()}</p>
+        <p>
+          ฿
+          {discount
+            ? sumAfterDiscount.toLocaleString()
+            : sumTotalPrice.toLocaleString()}
+        </p>
       </div>
       <hr className="w-full border-gray border-1"></hr>
-       <CartChooseAddress />
+      <CartChooseAddress/>
       <hr className="w-full border-gray border-1"></hr>
-      <PaymentContainer price={discount? sumAfterDiscount:sumTotalPrice} />
+      <PaymentContainer/>
       <button
         className="w-full bg-red-600 p-2 text-white hover:bg-red-400"
         onClick={handleClickCheckout}
       >
         Check Out
-      </button> 
+      </button>
     </div>
   );
 }

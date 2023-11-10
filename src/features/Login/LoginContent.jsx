@@ -1,12 +1,13 @@
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  fetchUserData,
   resetRegisterLoginInput,
   setLoginError,
   setLoginInput,
   setShowPassword,
 } from "../../stores/authSlice";
-import { fetchCartData, setUserProfile } from "../../stores/userSlice";
+// import { fetchCartData, setUserProfile } from "../../stores/userSlice";
 import * as authApi from "../../apis/auth-api";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../utills/localStorage";
@@ -28,9 +29,10 @@ export default function LoginContent() {
         const res = await authApi.login(loginInput);
         if (res.status === 201) {
           setAccessToken(res.data.accessToken);
-          const[user,cart] = await Promise.all([authApi.getMe(),authApi.getUserCartData()])
-          dispatch(setUserProfile(user.data.user));
-          dispatch(fetchCartData(cart.data.productsInCart))
+          dispatch(fetchUserData())// fetch when login(fetch at header didn't work when login )
+          // const[user,cart] = await Promise.all([authApi.getMe(),authApi.getUserCartData()])
+          // dispatch(setUserProfile(user.data.user));
+          // dispatch(fetchCartData(cart.data.productsInCart))
           navigate("/profile");
         }
       }

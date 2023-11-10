@@ -1,5 +1,4 @@
 export default function CartAddressContent({ lastestAddress }) {
-  // console.log(lastestAddress);
   return (
     <div className="word-normal my-2">
       <div className="flex flex-col gap-0.5">

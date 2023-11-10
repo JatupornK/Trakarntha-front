@@ -3,7 +3,6 @@ import Router from "./routes/Router";
 import { ToastContainer } from "react-toastify";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-// console.log(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 function App() {
   // const getScrollbarWidth = () => {
@@ -18,7 +17,7 @@ function App() {
     <>
       <Elements stripe={stripePromise}>
         <Router />
-        <ToastContainer //pop up ถ้า fail, success
+        <ToastContainer 
           position="top-center"
           autoClose={3000}
           hideProgressBar={false}
