@@ -14,6 +14,8 @@ const productSlice = createSlice({
     size: [], //filter size
     selectedSize: "", //select size (modal)
     quantity: 1,
+    productType: [],
+    productSize: [],
   },
   reducers: {
     resetState: (state, action) => {
@@ -147,6 +149,12 @@ const productSlice = createSlice({
       state.quantity = 1;
       state.selectedSize = "";
     },
+    fetchProductType: (state, action) => {
+      state.productType = action.payload
+    },
+    fetchProductSize: (state, action) => {
+      state.productSize = action.payload
+    },
     // setHover: (state, action) => {
     //   state.isHover[action.payload] = !state.isHover[action.payload]
     // }
@@ -167,7 +175,9 @@ export const {
   setSelectedSize,
   increaseQuantity,
   decreaseQuantity,
-  resetSelected
+  resetSelected,
+  fetchProductSize,
+  fetchProductType
 } = productSlice.actions; //destructuring from productSlice
 
 export const fetchProducts = () => async (dispatch) => {
@@ -214,12 +224,8 @@ export const getMaxMinPrice = () => async (dispatch) => {
       productsApi.getMaxMin(),
       productsApi.getProductSize(),
     ]);
-    let Size = [];
-    for (let item of size.data.size) {
-      Size.push(item.size);
-    }
     CATEGORY[1].type = range.data;
-    CATEGORY[2].type = Size;
+    CATEGORY[2].type = size.data.size;
     dispatch(resetState(range.data.min));
     // dispatch(filterByPrice(range.data.min));
   } catch (err) {

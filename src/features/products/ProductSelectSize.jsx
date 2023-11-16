@@ -12,7 +12,7 @@ export default function ProductSelectSize({ sizes }) {
   return (
     <>
       <div className="flex flex-row">
-        {sizes[0].Size.size !== "FREESIZE"? (
+        {sizes[0].Size.size !== "FREESIZE" ? (
           <>
             <label htmlFor="size" className="text-xl mr-3">
               Size :
@@ -37,9 +37,9 @@ export default function ProductSelectSize({ sizes }) {
               })}
             </select>
           </>
-        ):<label htmlFor="size" className="text-xl mr-3">
-        Size : {sizes[0].Size.size}
-      </label>}
+        ) : (
+          <div className="text-xl mr-3">Size : {sizes[0].Size.size}</div>
+        )}
       </div>
     </>
   );

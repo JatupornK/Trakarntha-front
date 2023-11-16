@@ -22,7 +22,9 @@ export default function PaymentContainer() {
   useEffect(() => {
     const fetchUserPaymentMethod = async () => {
       try {
+        console.log(userProfile)
         if (userProfile.stripeCustomerId) {
+          console.log('eiei')
           const {
             data: { lastestPayment, allPaymentMethods },
           } = await userApi.getLastFour();

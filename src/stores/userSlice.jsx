@@ -131,10 +131,10 @@ const userSlice = createSlice({
       let idx = state.userProfile.Addresses.findIndex(
         (item) => item.lastest === true
       );
-      console.log(generateCurrentTime());
-      console.log(state.userProfile.Addresses[idx].updatedAt);
+      // console.log(generateCurrentTime());
+      // console.log(state.userProfile.Addresses[idx].updatedAt);
       state.userProfile.Addresses[idx].updatedAt = generateCurrentTime();
-      console.log(state.userProfile.Addresses[idx].updatedAt);
+      // console.log(state.userProfile.Addresses[idx].updatedAt);
       state.userProfile.Addresses[idx].lastest = false;
       idx = state.userProfile.Addresses.findIndex(
         (item) => item.id === action.payload.id

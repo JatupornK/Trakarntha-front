@@ -16,16 +16,16 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const ref = useRef();
+  // useEffect(() => {
+  //   // console.log(window.innerWidth, document.documentElement.clientWidth)
+  //   // const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  //   // ref.current.style.width = `${window.innerWidth+'px'}`;
+  //   // console.dir(ref.current.style)
+  // }, []);
   useEffect(() => {
-    // console.log(window.innerWidth, document.documentElement.clientWidth)
-    // const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    // ref.current.style.width = `${window.innerWidth+'px'}`;
-    // console.dir(ref.current.style)
     let headerRelative = document.querySelector('.headerRelative')
     headerRelative.style.height = ref.current.offsetHeight+'px'
     dispatch(fetchUserData());//fetch when have token no need to login again
-  }, []);
-  useEffect(() => {
     let lastScrollY = window.pageYOffset;
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;

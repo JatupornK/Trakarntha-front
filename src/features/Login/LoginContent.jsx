@@ -27,13 +27,16 @@ export default function LoginContent() {
       } else {
         dispatch(resetRegisterLoginInput());
         const res = await authApi.login(loginInput);
+        console.log(res)
         if (res.status === 201) {
           setAccessToken(res.data.accessToken);
-          dispatch(fetchUserData())// fetch when login(fetch at header didn't work when login )
-          // const[user,cart] = await Promise.all([authApi.getMe(),authApi.getUserCartData()])
-          // dispatch(setUserProfile(user.data.user));
-          // dispatch(fetchCartData(cart.data.productsInCart))
-          navigate("/profile");
+          await dispatch(fetchUserData())// fetch when login(fetch at header didn't work when login )
+          // await เพราะต้องการให้ fetch userProfile เสร็จก่อนไม่งั้นจะโดน redirectIfNotAdmin ที่ดูข้อมูลจาก userProfile
+          if(res.data.role==='user'){
+            navigate("/all-products");
+          }else if(res.data.role==='admin') {
+            navigate('/admin')
+          }
         }
       }
       // console.log(res)

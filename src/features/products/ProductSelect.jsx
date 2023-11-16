@@ -13,6 +13,7 @@ export default function ProductSelect({ product, onClose }) {
   const [button, setButton] = useState("button1");
   const navigate = useNavigate();
   const handleAddToCart = async (e) => {
+    console.log(e.target)
     let size = e.target.size?.value || "FREESIZE";
     let input = {
       size,

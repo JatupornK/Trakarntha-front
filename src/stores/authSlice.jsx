@@ -69,6 +69,7 @@ export const {
   setLoginError,
 } = authSlice.actions;
 
+
 export const fetchUserData = () => async (dispatch) => {
   try {
     if (getAccessToken()) {
@@ -76,6 +77,7 @@ export const fetchUserData = () => async (dispatch) => {
         authApi.getMe(),
         authApi.getUserCartData(),
       ]);
+      console.log(user)
       dispatch(fetchCartData(cart.data.productsInCart));
       dispatch(setUserProfile(user.data.user));
     }

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartChooseAddress from "./CartChooseAddress";
 import PaymentContainer from "../Payments/PaymentContainer";
@@ -10,12 +9,13 @@ import {
   setOrderSuccess,
   setUserProfile,
 } from "../../stores/userSlice";
+import { toast } from "react-toastify";
 
 export default function CartOrderSummaryContent() {
-  const { cartData } = useSelector((state) => state.user);
+  // const { cartData,userProfile } = useSelector((state) => state.user);
   // const [isError, setIsError] = useState({address:'',payment:''});
   // const [isUsePromo, setIsUsePromo] = useState(false); //ต้องทำโปรโมด้วย
-  const { newSelectedAddressId, defaultPayment, userProfile } = useSelector(
+  const { newSelectedAddressId, defaultPayment, userProfile,cartData } = useSelector(
     (state) => state.user
   );
   const stripe = useStripe();
@@ -32,6 +32,10 @@ export default function CartOrderSummaryContent() {
   }
   const handleClickCheckout = async () => {
     try {
+      if(userProfile.role==='admin'){
+        toast.error('Admin can not add an order')
+        return;
+      }
       if(userProfile.Addresses.length===0||defaultPayment.id===''){
         if(defaultPayment.id===''){
           dispatch(setError({payment: 'Please add the payment before check out'}))
@@ -60,6 +64,7 @@ export default function CartOrderSummaryContent() {
         paymentId: defaultPayment.id,
         addressId: newSelectedAddressId.id,
         userId: userProfile.id,
+        price: amount
       });
       //check payment status
       const { paymentIntent, error2 } = await stripe.confirmCardPayment(
@@ -117,8 +122,9 @@ export default function CartOrderSummaryContent() {
       <hr className="w-full border-gray border-1"></hr>
       <PaymentContainer/>
       <button
-        className="w-full bg-red-600 p-2 text-white hover:bg-red-400"
+        className={`w-full bg-red-600 p-2 text-white ${userProfile.role!=='admin'&&'hover:bg-red-400'}`}
         onClick={handleClickCheckout}
+        // disabled={userProfile.role==='admin'? true: false}
       >
         Check Out
       </button>
