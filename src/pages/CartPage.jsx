@@ -8,8 +8,17 @@ export default function CartPage() {
   const { cartData, orderSuccess } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top when the component mounts
     dispatch(setOrderSuccess(false));
+    window.scrollTo(0, 0);
+    const handleBeforeUnload = () => {
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, []);
   return (
     <>

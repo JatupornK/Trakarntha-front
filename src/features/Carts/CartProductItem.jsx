@@ -19,14 +19,14 @@ export default function CartProductItem() {
         <div key={item.id}>
           <hr className="w-full border-gray border-1"></hr>
           <div className="h-44 py-4">
-            <div className="grid grid-flow-col grid-cols-4 h-full">
-              <div className="h-full w-full col-span-1 min-w-0 min-h-0 flex items-center">
-                <img className="object-fill h-full" src={item.image} />
+            <div className="grid grid-flow-col grid-cols-10 lg:grid-cols-4 h-full">
+              <div className="h-full w-full col-span-3 lg:col-span-1 min-w-0 min-h-0 flex items-center">
+                <img className="object-cover w-full h-full" src={item.image} />
               </div>
-              <div className="col-span-2 min-w-0 min-h-0 flex flex-col p-1 ml-5 justify-between">
+              <div className="col-span-5 lg:col-span-2 min-w-0 min-h-0 flex flex-col p-1 ml-5 justify-between">
                 <div className="text-sm flex flex-col gap-2">
-                  <h4 className="text-xl">{item.name}</h4>
-                  {item.size && <h5>Size: {item.size}</h5>}
+                  <h4 className="sm:text-lg md:text-lg lg:text-xl">{item.name}</h4>
+                  {item.size && <h5 className="text-sm md:text-md">Size: {item.size}</h5>}
                   <h5>฿ {item.price.toLocaleString()}</h5>
                 </div>
                 <div className="flex items-center border border-gray-400 w-fit h-6 cursor-pointer">
@@ -67,8 +67,8 @@ export default function CartProductItem() {
                   />
                 </div>
               </div>
-              <div className="col-span-1 min-w-0 min-h-0 text-xl flex p-1 relative flex-col justify-end items-end">
-                <h6 className="text-base">
+              <div className="col-span-2 lg:col-span-1 min-w-0 min-h-0 text-xl flex p-1 relative flex-col justify-end items-end">
+                <h6 className="text-sm lg:text-base">
                   Total: ฿ {Number(item.sumPrice).toLocaleString()}
                 </h6>
                 <AiOutlineClose

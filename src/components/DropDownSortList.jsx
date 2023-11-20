@@ -5,7 +5,7 @@ export default function DropDownSortList({ item, text }) {
   // console.log(item.func)
   return (
     <li
-      className={`hover:bg-gray-100 p-2 leading-4 ${
+      className={`hover:bg-gray-100 sm:text-base text-xs p-2 leading-4 ${
         item.title === text && "bg-gray-200"
       }`}
       onClick={()=>dispatch(sortAll({type: item.title}))}

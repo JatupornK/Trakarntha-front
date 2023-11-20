@@ -1,7 +1,6 @@
 import AdminOrderItem from "./AdminOrderItem";
 
 export default function AdminOrderBox({orders}) {
-    console.log(orders)
   return (
     <div className="w-full flex flex-col">
       {orders.map((item,idx) => (

@@ -1,10 +1,23 @@
 import { useSelector } from "react-redux";
 import ImageMain from "./ImageMain";
 import ImageSub from "./ImageSub";
+import { useEffect } from "react";
 
 export default function AdminAddImage() {
   const { productImage,errorProductImage } = useSelector((state) => state.admin);
-  console.log(productImage)
+
+  useEffect(() => {
+    // clean up URL.createObjectURL when image is changed to reduce oppotunity of memory leak
+    return () => {
+      if (productImage.productImageMain) {
+        URL.revokeObjectURL(productImage.productImageMain);
+      }
+      if (productImage.productImageSub) {
+        URL.revokeObjectURL(productImage.productImageSub);
+      }
+    };
+  }, [productImage.productImageMain, productImage.productImageSub]);
+
   return (
     <>
       <div className="mt-5">
@@ -18,7 +31,6 @@ export default function AdminAddImage() {
           <div className="flex justify-center mt-3">
             <img
               className="w-40 h-40 border border-black"
-              // src={createProductInput.productImageMain}
               src={URL.createObjectURL(productImage.productImageMain)}
             />
           </div>
@@ -33,7 +45,6 @@ export default function AdminAddImage() {
           <div className="flex justify-center mt-3">
             <img
               className="w-40 h-40 border border-black"
-              // src={createProductInput.productImageSub}
               src={URL.createObjectURL(productImage.productImageSub)}
             />
           </div>

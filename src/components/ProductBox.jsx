@@ -15,9 +15,7 @@ export default function ProductBox({ product }) {
   const handleChangeImageShow = () => {
     if (imageShow + 1 > product.Images.length - 1) {
       return setImageShow(0);
-    } else if (imageShow - 1 < 0) {
-      return setImageShow(product.Images.length - 1);
-    } else {
+    }else {
       return setImageShow(imageShow + 1);
     }
   };
@@ -50,10 +48,10 @@ export default function ProductBox({ product }) {
           <img
             src={
               !isHover
-                ? product.Images[0].image
+                ? product.Images[0]?.image
                 : product.Images[1]?.image
-                ? product.Images[1].image
-                : product.Images[0].image
+                ? product.Images[1]?.image
+                : product.Images[0]?.image
             }
             className={`w-full h-52 object-fill `}
           />

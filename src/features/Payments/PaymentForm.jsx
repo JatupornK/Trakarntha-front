@@ -26,6 +26,7 @@ const CARD_OPTION = {
       color: "#ffc7ee",
     },
   },
+  disableLink: true
 };
 
 export default function PaymentForm({ onClose }) {
@@ -50,7 +51,6 @@ export default function PaymentForm({ onClose }) {
       //step2
       let userPayment;
       if (!userProfile.stripeCustomerId) {
-        console.log("eiei");
         const customerRes = await userApi.createCustomer({
           paymentMethodId,
           name: userProfile.firstName,
@@ -86,40 +86,16 @@ export default function PaymentForm({ onClose }) {
         // dispatch(selectNewDefaultPayment())
         onClose();
       }
-      //step2.2
 
-      // //step 3 // ย้ายไปอยู่ตอนกด submit form
-      // const currency = "thb";
-      // const paymentIntentRes = await userApi.createPaymentIntent({
-      //   amount: price * 100,
-      //   currency,
-      //   paymentMethodId,
-      //   customerId,
-      // });
-      // console.log(paymentIntentRes);
-      // let clientSecret;
-      // if (paymentIntentRes.status === 201) {
-      //   clientSecret = paymentIntentRes.data.paymentIntent;
-      // }
-
-      // //step 4
-      // const { paymentIntent, error2 } = await stripe.confirmCardPayment(
-      //   clientSecret,
-      //   { payment_method: paymentMethodId }
-      // );
-      // if (error2) {
-      //   throw new Error(error2.message);
-      // } else {
-      //   console.log("Payment success", paymentIntent);
-      // }
     } catch (err) {
       toast.error(err.response.data.message)
+      onClose()
       console.log(err);
     }
   };
   return (
     <>
-      <div className="col-span-12 my-10">
+      <div className="col-span-12 mt-10 mb-7">
         <form
           onSubmit={handleSubmitForm}
           className="w-full flex flex-col items-center justify-center"
@@ -135,9 +111,9 @@ export default function PaymentForm({ onClose }) {
         </form>
       </div>
       <AiOutlineClose
-        size={40}
+        size={30}
         color="gray"
-        className="absolute right-1 top-2 hover:bg-gray-100 rounded-2xl p-1 mr-2 cursor-pointer"
+        className="absolute right-1 top-2 hover:bg-gray-100 rounded-lg p-1 mr-2 cursor-pointer"
         onClick={onClose}
       />
     </>

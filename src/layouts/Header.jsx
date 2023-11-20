@@ -16,24 +16,18 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const ref = useRef();
-  // useEffect(() => {
-  //   // console.log(window.innerWidth, document.documentElement.clientWidth)
-  //   // const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-  //   // ref.current.style.width = `${window.innerWidth+'px'}`;
-  //   // console.dir(ref.current.style)
-  // }, []);
+  
   useEffect(() => {
     let headerRelative = document.querySelector('.headerRelative')
     headerRelative.style.height = ref.current.offsetHeight+'px'
-    dispatch(fetchUserData());//fetch when have token no need to login again
+    if(userProfile===null){ //ไม่ทำให้ run เวลา header สลับ appear, disappear
+      dispatch(fetchUserData());//fetch when have token no need to login again
+    }
     let lastScrollY = window.pageYOffset;
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
       const direction = scrollY > lastScrollY ? "down" : "up";
       let floor = scrollY < 180 ? 180 : 1;
-      // if(scrollY < 10) {
-      //   setScrollDirection('');
-      // }else {
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > floor || scrollY - lastScrollY < -floor)
@@ -43,7 +37,8 @@ export default function Header() {
       if (scrollY === 0) {
         setScrollDirection("up");
       }
-      lastScrollY = scrollY > 0 ? scrollY : 0;
+      lastScrollY = scrollY > 0 ? scrollY : 0; 
+      // ถ้าไม่มีค่า lastScrollY จะไม่อัพเดทเนื่องจากทิศก็ไม่เปลี่ยนตามจะมีจุดเดียวที่เปลี่ยนคือจุดที่เป็น floor(180+นิดหน่อย)
     };
     // };
     window.addEventListener("scroll", updateScrollDirection); // add event listener
@@ -51,6 +46,7 @@ export default function Header() {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
     };
   }, [scrollDirection]);
+  // ต้องมี depedencies ไม่งั้นจะทำงานแค่ตรงจุดสูงสุด(scrollY=0) เพราะ scrollDirection = up==> set scrollDirection=>down (function รับค่า up มาตอนแรก) เสมอ
   return (
     <>
       <div className={`headerRelative ${scrollDirection==='up'? 'relative':'hidden'}`}></div>
@@ -60,11 +56,11 @@ export default function Header() {
           scrollDirection === "up" ? "scroll-up" : "scroll-down"
         }`}
       >
-        <div className="grid grid-flow-row grid-rows-3 items-center w-full">
-          <div className="row-span-1 min-w-0 min-h-0 text-center ">
+        <div className="grid grid-flow-row items-center w-full gap-y-4 sm:gap-y-0 sm:grid-rows-3">
+          <div className="row-span-1 min-w-0 min-h-0 text-center">
             <div className=" flex justify-center">
               <img
-                className="mt-1"
+                className="mt-1 sm:w-30 sm:h-30"
                 src="/logo.png"
                 width={120}
                 height={100}
@@ -108,10 +104,10 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <p className="text-red-300 text-6xl font-bold text-center min-w-0 min-h-0 row-span-1 ">
+          <p className="text-red-300 text-3xl sm:text-6xl font-bold text-center min-w-0 min-h-0 row-span-1 ">
             Trakarntha
           </p>
-          <ul className="flex flex-row justify-center row-span-1 min-w-0 min-h-0 -mt-2">
+          <ul className="flex flex-col justify-center row-span-1 min-w-0 min-h-0 -mt-2 sm:flex-row md:row-span-3">
             <MenuList />
           </ul>
         </div>

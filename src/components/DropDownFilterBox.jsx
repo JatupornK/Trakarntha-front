@@ -10,28 +10,31 @@ export default function DropDownFilterBox({ category }) {
     <>
       {category.map((item, idx) => (
         <div
-          className="text-gray-500 cursor-pointer"
+          className={`relative cursor-pointerflex-1 md:flex-grow-0 w-full`}
           key={item.title}
           onClick={() => {
             dispatch(setFilterClick(idx));
           }}
         >
           <hr className="border-1 border-gray-200" />
-          <div className="flex flex-row py-5 items-center">
-            <div className="flex-1">{item.title}</div>
+          <div className={`flex flex-row p-2 md:py-5 items-center border ${idx===1 && 'border-x-0'} border-black md:border-none`}>
+            <div className="flex-1 text-xs sm:text-base">{item.title}</div>
             {!filter[idx] ? (
-              <AiOutlinePlus size={20} />
+              <AiOutlinePlus className="md:w-5 md:h-5 sm:w-4 sm:h-4 w-3 h-3" />
             ) : (
-              <AiOutlineMinus size={20} />
+              <AiOutlineMinus className="md:w-5 md:h-5 sm:w-4 sm:h-4 w-3 h-3"/>
             )}
           </div>
+          <div className="w-full">
+
           {filter[idx] && (
             <DropDownFilterItem
-              key={item.title}
-              list={item.type}
-              type={item.box}
+            key={item.title}
+            list={item.type}
+            type={item.box}
             />
-          )}
+            )}
+            </div>
         </div>
       ))}
       <hr className="border-1 border-gray-200" />

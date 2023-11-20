@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import * as productApi from "../../apis/product-api";
+// import * as productApi from "../../apis/product-api";
 import { useEffect } from "react";
-import { fetchProductSize, fetchProductType } from "../../stores/productSlice";
+// import { fetchProductSize, fetchProductType } from "../../stores/productSlice";
 import AdminSelectProductType from "./AdminSelectProductType";
 import AdminSelectProductSize from "./AdminSelectProductSize";
 import {toast} from 'react-toastify';
@@ -25,21 +25,6 @@ export default function AdminCreateProductForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProductInfo = async () => {
-      try {
-        const [type, size] = await Promise.all([
-          productApi.getProductType(),
-          productApi.getProductSize(),
-        ]);
-        dispatch(fetchProductSize(size.data.size));
-        dispatch(fetchProductType(type.data.type));
-        dispatch(setCreateProductInput({ type: type.data.type[0] }));
-      } catch (err) {
-        console.log("Can not get product size and type");
-      }
-    };
-    fetchProductInfo();
-
     const textarea = document.getElementById("productDescription");
     const label = document.getElementById("productDescriptionLabel");
     const handleScroll = () => {
@@ -57,6 +42,18 @@ export default function AdminCreateProductForm() {
     };
   }, []);
 
+  useEffect(() => {
+        // clean up URL.createObjectURL when the form sent success and navigate to another page
+    return () => {
+      if (productImage.productImageMain) {
+        URL.revokeObjectURL(productImage.productImageMain);
+      }
+      if (productImage.productImageSub) {
+        URL.revokeObjectURL(productImage.productImageSub);
+      }
+    };
+  }, [productImage.productImageMain, productImage.productImageSub]);
+
   const handleSubmitForm = async(e) => {
     try {
       e.preventDefault();
@@ -69,10 +66,15 @@ export default function AdminCreateProductForm() {
         if(!productImage.productImageSub){
           dispatch(setErrorProductImage({productImageSub: 'Please attach image sub'}))
         }
-      }else if(!productImage.productImageMain){
-        dispatch(setErrorProductImage({productImageMain: 'Please attach image main'}))
-      }else if(!productImage.productImageSub){
-        dispatch(setErrorProductImage({productImageSub: 'Please attach image sub'}))
+      }else if(!productImage.productImageMain||!productImage.productImageSub){
+        if(!productImage.productImageMain){
+          dispatch(setErrorCreateProductInput());
+          dispatch(setErrorProductImage({productImageMain: 'Please attach image main'}))
+        }
+        if(!productImage.productImageSub){
+          dispatch(setErrorCreateProductInput());
+          dispatch(setErrorProductImage({productImageSub: 'Please attach image sub'}))
+        }
       }else {
         const formData = new FormData();
         formData.append('name', createProductInput.name);
@@ -85,7 +87,7 @@ export default function AdminCreateProductForm() {
         const res = await adminApi.createProduct(formData);
         console.log(res)
         if(res.status===201){
-          dispatch(resetCreateProductForm());
+          dispatch(resetCreateProductForm()); // reset productImage and all form input
           toast.success('Create new product success.');
           navigate('/all-products')
         }

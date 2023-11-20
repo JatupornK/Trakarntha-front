@@ -6,7 +6,7 @@ export default function PaymentItem() {
   const { defaultPayment, userAllPaymentMethods } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 //   console.log(defaultPayment);
-// console.log(userAllPaymentMethods, defaultPayment)
+console.log(userAllPaymentMethods, defaultPayment)
   const compareFn = (a, b) => {
     return a.updatedAt < b.updatedAt ? 1 : -1;
   };

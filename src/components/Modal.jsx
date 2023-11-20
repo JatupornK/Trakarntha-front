@@ -5,7 +5,7 @@
 // import { setBuyNow } from "../stores/userSlice";
 // import { AiFillCaretRight, AiFillCaretLeft } from "react-icons/ai";
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
 // export default function Modal({ onClose, product, children }) {
 export default function Modal({ children, width,style }) {

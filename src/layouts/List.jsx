@@ -14,7 +14,7 @@ export default function List ({link, title, idx}) {
         <Link to={link}>
         <li
           className={`text-center hover:setIsHover(true) hover:handlehover px-3 pt-1 pb-2 ${
-            idx === 0 ? "" : "ml-2"
+            idx === 0 ? "" : "lg:ml-8 md:ml-0"
           } rounded-md hover:text-red-400 hover:underline underline-offset-2`}
         >
           {title}

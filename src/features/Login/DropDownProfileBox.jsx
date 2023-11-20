@@ -1,7 +1,6 @@
 import { AiOutlineCloseCircle, AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetCartData,
   setIsHoverProfile,
   userLogout,
 } from "../../stores/userSlice";
@@ -41,7 +40,6 @@ export default function DropDownProfileBox() {
                 navigate("/login");
                 removeAccessToken();
                 dispatch(userLogout());
-                dispatch(resetCartData());
               }}
             >
               <div className="text-xs">

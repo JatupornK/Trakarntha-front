@@ -10,7 +10,7 @@ export default function ProductSelectQuantity() {
   return (
     <>
       <div className="flex flex-row mt-4 cursor-pointer">
-        <label htmlFor="quantity" className="text-xl mr-3">
+        <label htmlFor="quantity" className="md:text-lg lg:text-xl mr-3">
           Quantity :
         </label>
         <div className="flex items-center border border-gray-400 w-fit ">

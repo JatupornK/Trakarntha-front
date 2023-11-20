@@ -2,12 +2,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 30;
   background-color: #ffffff ;
   transition: 1s cubic-bezier(0.22, 1, 0.36, 1);
   transform: none;
-  overflow-y: hidden;
 }
 
 .scroll-down {

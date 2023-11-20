@@ -183,6 +183,7 @@ export const {
 export const fetchProducts = () => async (dispatch) => {
   try {
     const res = await productsApi.getAllProducts();
+    console.log(res)
     dispatch(getAllProducts(res.data));
   } catch (err) {
     alert("can't load products");

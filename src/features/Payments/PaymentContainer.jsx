@@ -17,22 +17,23 @@ export default function PaymentContainer() {
   const { defaultPayment, userProfile, haveAddressPayment } = useSelector(
     (state) => state.user
   );
+  console.log(defaultPayment)
   // console.log(defaultPayment);
   // console.log(price)
   useEffect(() => {
     const fetchUserPaymentMethod = async () => {
       try {
-        console.log(userProfile)
         if (userProfile.stripeCustomerId) {
-          console.log('eiei')
           const {
             data: { lastestPayment, allPaymentMethods },
           } = await userApi.getLastFour();
+          console.log(lastestPayment)
+          console.log(allPaymentMethods)
           if (!lastestPayment || !allPaymentMethods) {
             throw new Error("Can not load user payment");
           }
-          console.log(lastestPayment)
-          console.log(allPaymentMethods)
+          // console.log(lastestPayment)
+          // console.log(allPaymentMethods)
           dispatch(setDefaultPayment(lastestPayment));
           dispatch(setAllUserPaymentMethods(allPaymentMethods));
           dispatch(selectNewDefaultPayment(lastestPayment.id));

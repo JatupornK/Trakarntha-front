@@ -5,6 +5,7 @@ import { setCreateProductInput } from "../../stores/adminSlice";
 export default function AdminSelectProductType({ type }) {
     const dispatch = useDispatch();
     const {createProductInput} = useSelector(state=>state.admin);
+    console.log(type)
     // useEffect(()=>{
     //     dispatch(setCreateProductInput({type:type[0]}))
     // },[])

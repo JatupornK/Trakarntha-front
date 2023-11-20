@@ -14,13 +14,13 @@ export default function ProductSelectSize({ sizes }) {
       <div className="flex flex-row">
         {sizes[0].Size.size !== "FREESIZE" ? (
           <>
-            <label htmlFor="size" className="text-xl mr-3">
+            <label htmlFor="size" className="md:text-lg lg:text-xl mr-3">
               Size :
             </label>
             <select
               name="size"
               id="size"
-              className="w-2/12  border border-1 border-gray-500 text-center cursor-pointer"
+              className="w-4/12 md:w-2/12  border border-1 border-gray-500 text-center cursor-pointer"
               value={selectedSize}
               onChange={(e) => dispatch(setSelectedSize(e.target.value))}
             >
@@ -38,7 +38,7 @@ export default function ProductSelectSize({ sizes }) {
             </select>
           </>
         ) : (
-          <div className="text-xl mr-3">Size : {sizes[0].Size.size}</div>
+          <div className="md:text-lg lg:text-xl mr-3">Size : {sizes[0].Size.size}</div>
         )}
       </div>
     </>

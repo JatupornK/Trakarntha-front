@@ -9,7 +9,7 @@ import AdminOrderBox from "./AdminOrderBox";
 export default function AdminOrderDashboard() {
   const { orders } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
-
+  console.log(orders)
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -37,7 +37,6 @@ export default function AdminOrderDashboard() {
     fetchOrder();
   }, []);
 
-  console.log(orders);
   return (
     <div className="container w-full">
       <div className="w-full flex flex-row justify-between">

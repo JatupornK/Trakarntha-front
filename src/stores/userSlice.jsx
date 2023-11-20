@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as userApi from "../apis/user-api";
-import { generateCurrentTime, getTimeStamp } from "../utills/getCurrentTime";
+import { generateCurrentTime } from "../utills/getCurrentTime";
 
 const initialInputCreateAddress = {
   addressTitle: "",
@@ -47,8 +47,18 @@ const userSlice = createSlice({
       state.isHoverProfile = action.payload;
     },
     userLogout: (state, action) => {
-      state.userProfile = null;
-      state.isHoverProfile = false;
+      state.userProfile= null,
+    state.isHoverProfile= false,
+    state.cartData= [],
+    state.buyNow= {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
+    state.inputCreateAddress= initialInputCreateAddress,
+    state.errorCreateAddress= initialInputCreateAddress,
+    state.newSelectedAddressId= { id: "" },
+    state.defaultPayment= initialDefaultPayment,
+    state.userAllPaymentMethods= [],
+    state.newSelectedPaymentId= { id: "" },
+    state.orderSuccess= false,
+    state.haveAddressPayment= initialError
     },
     fetchCartData: (state, action) => {
       console.log(action.payload)
@@ -163,7 +173,7 @@ const userSlice = createSlice({
       state.userAllPaymentMethods.unshift(action.payload);
     },
     selectNewDefaultPayment: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.newSelectedPaymentId = { ...action.payload };
     },
     updateSelectedPayment: (state, action) => {
@@ -171,7 +181,7 @@ const userSlice = createSlice({
       let idx = state.userAllPaymentMethods.findIndex(
         (item) => item.id === state.defaultPayment.id
       );
-      state.userAllPaymentMethods[idx].updatedAt = getTimeStamp();
+      state.userAllPaymentMethods[idx].updatedAt = generateCurrentTime();
       idx = state.userAllPaymentMethods.findIndex(
         (item) => item.id === action.payload.id
       );

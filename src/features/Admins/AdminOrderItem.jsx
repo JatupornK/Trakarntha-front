@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import AdminOrderItemProduct from "./AdminOrderItemProduct";
+import AdminUpdateOrderStatus from "./AdminUpdateOrderStatus";
+import { orderStatus } from "../../stores/adminSlice";
 
 export default function AdminOrderItem({ order }) {
   const [isExclusiveMember, setIsExclusiveMember] = useState(false);
-  console.log(order);
+  const [isClick, setIsClick] = useState(false);
+  console.log(order)
   const sumOrderPrice = order.reduce((acc, el) => {
     return acc + el.Cart.sumPrice;
   }, 0);
   useEffect(() => {
-    console.log("eiei");
     if (order[0].Order.orderPrice != sumOrderPrice) {
-      console.log(order[0].Order.orderPrice, sumOrderPrice);
       setIsExclusiveMember(true);
     }
   }, []);
 
-  console.log(sumOrderPrice);
+  let div = document.querySelector("body");
+  useEffect(() => {
+    div.style.overflowY = isClick ? "hidden" : "unset";
+  }, [isClick]);
+
   return (
     <div className="my-5">
       <h1 className="text-2xl text-center font-semibold">
@@ -28,6 +33,10 @@ export default function AdminOrderItem({ order }) {
             {order[0].Order.createdAt.slice(0, 10)}
           </h2>
           <h2>
+            <span className="font-semibold">Order Status</span> :{" "}
+            {order[0].Order.orderStatus}
+          </h2>
+          <h2>
             <span className="font-semibold">Payment</span> :{" "}
             {order[0].Order.UserPayment.Payment.payment}-
             {order[0].Order.paymentStatus}{" "}
@@ -35,6 +44,10 @@ export default function AdminOrderItem({ order }) {
 
           <h2>
             <span className="font-semibold">Customer</span> :{" "}
+            {order[0].Order.User.firstName} {order[0].Order.User.lastName}
+          </h2>
+          <h2>
+            <span className="font-semibold">To</span> :{" "}
             {order[0].Order.Address.firstName} {order[0].Order.Address.lastName}
           </h2>
           <h2>
@@ -54,15 +67,15 @@ export default function AdminOrderItem({ order }) {
             <AdminOrderItemProduct key={item.id} product={item} />
           ))}
         </div>
-        {/* <h3 className="mt-1">
+        <div className="mt-1">
           {isExclusiveMember && (
-            <h3>
-              <span className="font-semibold">Sum price</span> :{" "}
-              {sumOrderPrice.toLocaleString()}
-            </h3>
-          )}
-          {isExclusiveMember && (
-            <h3 className="font-semibold">Exclusive member discount 10%</h3>
+            <>
+              <h3>
+                <span className="font-semibold">Sum price</span> :{" "}
+                {sumOrderPrice.toLocaleString()}
+              </h3>
+              <h3 className="font-semibold">Exclusive member discount 10%</h3>
+            </>
           )}
           <span className="font-semibold">Total Price</span> :{" "}
           {!isExclusiveMember
@@ -73,7 +86,12 @@ export default function AdminOrderItem({ order }) {
               " = " +
               (sumOrderPrice * 0.9).toLocaleString()}{" "}
           ฿
-        </h3> */}
+        </div>
+      </div>
+      <div className="w-full flex justify-center">
+        {orderStatus[orderStatus.length - 1] !== order[0].Order.orderStatus && (
+          <AdminUpdateOrderStatus onOpen={()=>setIsClick(true)} onClose={() => setIsClick(false)} isClick={isClick} orderStatus={order[0].Order.orderStatus} orderId={order[0].Order.id} />
+        )}
       </div>
     </div>
   );

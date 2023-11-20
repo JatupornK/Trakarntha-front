@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { STATUS_COMPLETE, STATUS_DELIVERY, STATUS_FAIL, STATUS_PENDING, STATUS_PREPARING, STATUS_SUCCESS, STATUS_WAITING } from "../configs/constant";
 
 const initialInputCreateProduct = {
   name: "",
@@ -18,6 +19,10 @@ const initialProductImage = {
   productImageMain: "",
   productImageSub: "",
 };
+export const orderStatus = ['All',STATUS_WAITING,STATUS_PENDING,STATUS_PREPARING,STATUS_DELIVERY,STATUS_COMPLETE];
+
+export const paymentStatus = ['All',STATUS_WAITING, STATUS_SUCCESS,STATUS_FAIL]
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -25,8 +30,10 @@ const adminSlice = createSlice({
     errorCreateProductInput: initialErrorInputCreateProduct,
     productImage: initialProductImage,
     errorProductImage: initialProductImage,
-    sortOrder: "",
+    sortOrderStatus: "All",
+    sortPaymentStatus: 'All',
     orders:[],
+    ordersSort: [],
   },
   reducers: {
     setCreateProductInput: (state, action) => {
@@ -79,6 +86,9 @@ const adminSlice = createSlice({
     },
     setErrorCreateProductInput: (state, action) => {
       console.log(action.payload);
+      if(action.payload===''){
+        return state.errorCreateProductInput = initialErrorInputCreateProduct
+      }
       state.errorCreateProductInput = action.payload;
     },
     resetCreateProductForm: (state, action) => {
@@ -87,11 +97,39 @@ const adminSlice = createSlice({
       state.createProductInput = initialInputCreateProduct;
       state.errorCreateProductInput = initialErrorInputCreateProduct;
     },
-    setSortOrder: (state, action) => {
-      state.sortOrder = action.payload;
+    sortOrder: (state, action) => {
+      console.log(action.payload)
+      if(action.payload?.type==='order'){
+        state.sortOrderStatus = action.payload.sort;
+      }else if(action.payload?.type==='payment'){
+        state.sortPaymentStatus = action.payload.sort;
+      }
+      
+      if(state.sortOrderStatus==='All') {
+        state.orders = state.ordersSort
+      }else{
+        console.log('sort order status', state.sortOrderStatus)
+        state.orders = state.ordersSort.filter(item=>item[0].Order.orderStatus===state.sortOrderStatus)
+      }
+
+      if(state.sortPaymentStatus!=='All'){
+        state.orders = state.orders.filter(item=>item[0].Order.paymentStatus===state.sortPaymentStatus);
+      }
     },
     setOrder: (state, action) => {
       state.orders = action.payload;
+      state.ordersSort = action.payload
+      state.sortOrderStatus = 'All'
+      state.sortPaymentStatus = 'All'
+    },
+    updateOrderStatus: (state, action) => {
+      console.log('done')
+      const index = state.orders.findIndex(item=>item[0].Order.id===action.payload.id);
+      console.log(index)
+      state.orders[index][0].Order.orderStatus = action.payload.status
+      const index2 = state.ordersSort.findIndex(item=>item[0].Order.id===action.payload.id);
+      console.log(index2)
+      state.ordersSort[index2][0].Order.orderStatus = action.payload.status
     }
   },
 });
@@ -104,6 +142,7 @@ export const {
   setProductImage,
   setErrorProductImage,
   resetCreateProductForm,
-  setSortOrder,
-  setOrder
+  sortOrder,
+  setOrder,
+  updateOrderStatus
 } = adminSlice.actions;

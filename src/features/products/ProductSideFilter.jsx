@@ -14,7 +14,7 @@ export default function ProductSideFilter() {
   }, []);
   return (
     <>
-      <div className="w-3/12 pr-5 mt-2">
+      <div className="w-10/12 sm:w-6/12 md:gap-0 md:w-3/12 p-0 md:pr-5 mt-2 flex flex-row md:flex-col">
         <DropDownFilterBox category={CATEGORY} />
       </div>
     </>

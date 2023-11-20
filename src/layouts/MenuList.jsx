@@ -13,7 +13,7 @@ const menuList = [
   { link: "/all-products", title: "All Product" },
   { link: "/our-story", title: "Our Story" },
   { link: "/membership", title: "Membership" },
-  { link: '/', title:'More'}
+  // { link: '/', title:'More'}
 ];
 export default function MenuList() {
   const {userProfile} = useSelector(state=> state.user);
