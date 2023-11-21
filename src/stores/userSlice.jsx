@@ -141,7 +141,7 @@ const userSlice = createSlice({
       let idx = state.userProfile.Addresses.findIndex(
         (item) => item.lastest === true
       );
-      // console.log(generateCurrentTime());
+      console.log(generateCurrentTime());
       // console.log(state.userProfile.Addresses[idx].updatedAt);
       state.userProfile.Addresses[idx].updatedAt = generateCurrentTime();
       // console.log(state.userProfile.Addresses[idx].updatedAt);
@@ -173,7 +173,7 @@ const userSlice = createSlice({
       state.userAllPaymentMethods.unshift(action.payload);
     },
     selectNewDefaultPayment: (state, action) => {
-      // console.log(action.payload);
+      console.log(action.payload);
       state.newSelectedPaymentId = { ...action.payload };
     },
     updateSelectedPayment: (state, action) => {

@@ -14,8 +14,8 @@ const productSlice = createSlice({
     size: [], //filter size
     selectedSize: "", //select size (modal)
     quantity: 1,
-    productType: [],
-    productSize: [],
+    productType: [],//keep product type
+    productSize: [],//keep product size
   },
   reducers: {
     resetState: (state, action) => {
@@ -155,6 +155,11 @@ const productSlice = createSlice({
     fetchProductSize: (state, action) => {
       state.productSize = action.payload
     },
+    updateProductStatus: (state, action) => {
+      let index = state.products.findIndex(item=>item.id===action.payload.id)
+      state.products[index].isDisabled = !state.products[index].isDisabled
+      state.productsFilter[index].isDisabled = !state.productsFilter[index].isDisabled
+    }
     // setHover: (state, action) => {
     //   state.isHover[action.payload] = !state.isHover[action.payload]
     // }
@@ -177,7 +182,8 @@ export const {
   decreaseQuantity,
   resetSelected,
   fetchProductSize,
-  fetchProductType
+  fetchProductType,
+  updateProductStatus
 } = productSlice.actions; //destructuring from productSlice
 
 export const fetchProducts = () => async (dispatch) => {
@@ -225,6 +231,7 @@ export const getMaxMinPrice = () => async (dispatch) => {
       productsApi.getMaxMin(),
       productsApi.getProductSize(),
     ]);
+    console.log(size)
     CATEGORY[1].type = range.data;
     CATEGORY[2].type = size.data.size;
     dispatch(resetState(range.data.min));

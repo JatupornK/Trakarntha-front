@@ -10,7 +10,7 @@ export default function DropDownFilterBox({ category }) {
     <>
       {category.map((item, idx) => (
         <div
-          className={`relative cursor-pointerflex-1 md:flex-grow-0 w-full`}
+          className={`relative cursor-pointer flex-1 md:flex-grow-0 w-full`}
           key={item.title}
           onClick={() => {
             dispatch(setFilterClick(idx));

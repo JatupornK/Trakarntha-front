@@ -5,3 +5,5 @@ export const createProduct = (input) => axios.post('/admin/create-product', inpu
 export const fetchAllOrder = () => axios.get('/admin/orders');
 
 export const updateOrderStatus = (input) => axios.patch('/admin/order/update', input);
+
+export const updateProductStatus = (input) => axios.patch('/admin/product/update',input)

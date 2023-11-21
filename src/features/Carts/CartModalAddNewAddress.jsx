@@ -8,14 +8,17 @@ import {
   selectNewAddress
 } from "../../stores/userSlice";
 import * as userApi from "../../apis/user-api";
+import useLoading from "../../hooks/useLoading";
 export default function CartModalAddNewAddress({ onSuccess }) {
   const { inputCreateAddress, errorCreateAddress } = useSelector(
     (state) => state.user
   );
+  const {startLoading, stopLoading} = useLoading();
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      startLoading();
       const isError = validateCreateAddress(inputCreateAddress);
       if (isError) {
         dispatch(setErrorCreateAddress(isError));
@@ -30,6 +33,8 @@ export default function CartModalAddNewAddress({ onSuccess }) {
       }
     } catch (err) {
       alert(err.message);
+    } finally {
+      stopLoading();
     }
   };
   return (

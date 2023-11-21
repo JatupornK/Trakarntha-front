@@ -10,14 +10,14 @@ import {
   setUserProfile,
 } from "../../stores/userSlice";
 import { toast } from "react-toastify";
+import useLoading from "../../hooks/useLoading";
 
 export default function CartOrderSummaryContent() {
-  // const { cartData,userProfile } = useSelector((state) => state.user);
-  // const [isError, setIsError] = useState({address:'',payment:''});
   // const [isUsePromo, setIsUsePromo] = useState(false); //ต้องทำโปรโมด้วย
   const { newSelectedAddressId, defaultPayment, userProfile,cartData } = useSelector(
     (state) => state.user
   );
+  const {startLoading, stopLoading} = useLoading();
   const stripe = useStripe();
   const dispatch = useDispatch();
   // console.log(cartData);
@@ -32,6 +32,7 @@ export default function CartOrderSummaryContent() {
   }
   const handleClickCheckout = async () => {
     try {
+      startLoading();
       if(userProfile.role==='admin'){
         toast.error('Admin can not add an order')
         return;
@@ -92,6 +93,8 @@ export default function CartOrderSummaryContent() {
       }
     } catch (err) {
       console.log(err.message);
+    } finally { 
+      stopLoading();
     }
   };
 
@@ -111,7 +114,7 @@ export default function CartOrderSummaryContent() {
       <div className="text-xl text-center flex justify-between p-1 py-5">
         <p>Total: </p>
         <p>
-          ฿
+          ฿{' '}
           {discount
             ? sumAfterDiscount.toLocaleString()
             : sumTotalPrice.toLocaleString()}

@@ -15,15 +15,17 @@ import {
 import AdminAddImage from "./AdminAddImage";
 import { validateCreateProductForm } from "../../validators/ValidateCreateProduct";
 import { useNavigate } from "react-router-dom";
+import useLoading from "../../hooks/useLoading";
 
 export default function AdminCreateProductForm() {
   const { productType, productSize } = useSelector((state) => state.products);
   const { createProductInput, errorCreateProductInput, productImage } = useSelector(
     (state) => state.admin
   );
+  const {startLoading, stopLoading} = useLoading();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+    console.log(createProductInput)
   useEffect(() => {
     const textarea = document.getElementById("productDescription");
     const label = document.getElementById("productDescriptionLabel");
@@ -57,6 +59,7 @@ export default function AdminCreateProductForm() {
   const handleSubmitForm = async(e) => {
     try {
       e.preventDefault();
+      startLoading();
       const isError = validateCreateProductForm(createProductInput);
       if (isError) {
         dispatch(setErrorCreateProductInput(isError));
@@ -95,6 +98,8 @@ export default function AdminCreateProductForm() {
     } catch (err) {
       toast.error('Fail to create new product, Please try again later.')
       console.log(err)
+    } finally {
+      stopLoading();
     }
   };
 
@@ -202,7 +207,7 @@ export default function AdminCreateProductForm() {
       <AdminAddImage />
       <button
         type="submit"
-        className="bg-black text-white p-3 w-full my-6 hover:bg-gray-700"
+        className="bg-black text-white p-3 w-full mt-6 mb-12 hover:bg-gray-700"
       >
         Create product
       </button>

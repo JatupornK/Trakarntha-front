@@ -6,11 +6,14 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./stores/index.jsx";
 // import ProductContextProvider from "./contexts/ProductContext.jsx";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import LoadingContextProvider from "./contexts/LoadingContext.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <LoadingContextProvider>
+      <Provider store={store}>
         <App />
-    </Provider>
+      </Provider>
+    </LoadingContextProvider>
   </React.StrictMode>
 );

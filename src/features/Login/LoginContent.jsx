@@ -12,22 +12,24 @@ import * as authApi from "../../apis/auth-api";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../utills/localStorage";
 import { validateLogin } from "../../validators/ValidateRegister";
+import useLoading from "../../hooks/useLoading";
 export default function LoginContent() {
   const { showPassword, loginInput, loginError } = useSelector(
     (state) => state.auth
   );
+  const {startLoading, stopLoading} = useLoading();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
+      startLoading();
       const result = validateLogin(loginInput);
       if (result) {
         dispatch(setLoginError(result));
       } else {
         dispatch(resetRegisterLoginInput());
         const res = await authApi.login(loginInput);
-        console.log(res)
         if (res.status === 201) {
           setAccessToken(res.data.accessToken);
           await dispatch(fetchUserData())// fetch when login(fetch at header didn't work when login )
@@ -47,6 +49,8 @@ export default function LoginContent() {
           password: err.response?.data.message,
         })
       );
+    }finally {
+      stopLoading();
     }
   };
   return (

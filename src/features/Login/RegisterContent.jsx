@@ -10,17 +10,19 @@ import {
   setRegisterInput,
   setShowPassword,
 } from "../../stores/authSlice";
+import useLoading from "../../hooks/useLoading";
 
 export default function RegisterContent() {
   const { showPassword, registerError, registerInput } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
-
-  console.log(registerError)
+  const { startLoading, stopLoading } = useLoading();
+  console.log(registerError);
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
+      startLoading();
       const result = validateRegister(registerInput);
       // console.log(result)
       if (result) {
@@ -39,6 +41,8 @@ export default function RegisterContent() {
     } catch (err) {
       toast.error(err.response?.data.message);
       dispatch(setRegisterError({ email: err.response?.data.message }));
+    } finally {
+      stopLoading();
     }
   };
 

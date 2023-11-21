@@ -20,7 +20,7 @@ export default function AdminContainer() {
           productApi.getProductType(),
           productApi.getProductSize(),
         ]);
-        dispatch(fetchProductSize(size.data.size));
+        dispatch(fetchProductSize(size.data.sizes));
         dispatch(fetchProductType(type.data.type));
         dispatch(setCreateProductInput({ type: type.data.type[0] }));
       } catch (err) {

@@ -11,6 +11,7 @@ import {
   setNewStripeCustomer,
 } from "../../stores/userSlice";
 import {toast} from 'react-toastify'
+import useLoading from "../../hooks/useLoading";
 const CARD_OPTION = {
   iconStyle: "solid",
   style: {
@@ -34,9 +35,11 @@ export default function PaymentForm({ onClose }) {
   const elements = useElements();
   const dispatch = useDispatch();
   const { userProfile } = useSelector((state) => state.user);
+  const {startLoading, stopLoading} = useLoading();
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
+      startLoading();
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardElement),
@@ -44,6 +47,8 @@ export default function PaymentForm({ onClose }) {
       if (error) {
         throw new Error(error.message);
       }
+      // ถ้าการ์ดที่ add fail ถ้าไม่เคยมี stripe customerId จะ error ตอน createCustomer ของ stripe
+      // ถ้าการ์ดที่ add fail แต่เคยมี stripe customerId จะ error ตอนจะแนบ payment ใหม่ของ stripe
       dispatch(selectNewDefaultPayment({id:paymentMethod.id}))
       const paymentMethodId = paymentMethod.id;
       // console.log(paymentMethod);
@@ -91,6 +96,8 @@ export default function PaymentForm({ onClose }) {
       toast.error(err.response.data.message)
       onClose()
       console.log(err);
+    } finally {
+      stopLoading();
     }
   };
   return (
