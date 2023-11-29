@@ -15,13 +15,13 @@ const initialDefaultPayment = {
   brand: "",
   updatedAt: "",
   id: "",
-  lastest: '',
+  lastest: "",
   // userPaymentId:
 };
 const initialError = {
-  address: '',
-  payment: '',
-}
+  address: "",
+  payment: "",
+};
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -32,12 +32,12 @@ const userSlice = createSlice({
     inputCreateAddress: initialInputCreateAddress,
     errorCreateAddress: initialInputCreateAddress,
     newSelectedAddressId: { id: "" },
-    editAddressId: {id:''},
+    editAddressId: { id: "" },
     defaultPayment: initialDefaultPayment,
     userAllPaymentMethods: [],
     newSelectedPaymentId: { id: "" },
     orderSuccess: false,
-    haveAddressPayment: initialError
+    haveAddressPayment: initialError,
   },
   reducers: {
     setUserProfile: (state, action) => {
@@ -48,18 +48,18 @@ const userSlice = createSlice({
       state.isHoverProfile = action.payload;
     },
     userLogout: (state, action) => {
-      state.userProfile= null,
-      state.isHoverProfile= false,
-      state.cartData= [],
-      state.buyNow= {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
-      state.inputCreateAddress= initialInputCreateAddress,
-      state.errorCreateAddress= initialInputCreateAddress,
-      state.newSelectedAddressId= { id: "" },
-      state.defaultPayment= initialDefaultPayment,
-      state.userAllPaymentMethods= [],
-      state.newSelectedPaymentId= { id: "" },
-      state.orderSuccess= false,
-      state.haveAddressPayment= initialError
+      (state.userProfile = null),
+        (state.isHoverProfile = false),
+        (state.cartData = []),
+        (state.buyNow = {}), // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
+        (state.inputCreateAddress = initialInputCreateAddress),
+        (state.errorCreateAddress = initialInputCreateAddress),
+        (state.newSelectedAddressId = { id: "" }),
+        (state.defaultPayment = initialDefaultPayment),
+        (state.userAllPaymentMethods = []),
+        (state.newSelectedPaymentId = { id: "" }),
+        (state.orderSuccess = false),
+        (state.haveAddressPayment = initialError);
     },
     fetchCartData: (state, action) => {
       // console.log(action.payload)
@@ -125,13 +125,31 @@ const userSlice = createSlice({
       state.inputCreateAddress = initialInputCreateAddress;
     },
     setEditAddressId: (state, action) => {
-      state.editAddressId = {...state.editAddressId,...action.payload}
+      state.editAddressId = { ...state.editAddressId, ...action.payload };
     },
     editUserProfileAddress: (state, action) => {
-      console.log(action.payload)
-      let idx = state.userProfile.Addresses.findIndex(item=>item.id===action.payload.id);
-      console.log(idx)
-      state.userProfile.Addresses[idx]={...state.userProfile.Addresses[idx],...action.payload.value}
+      console.log(action.payload);
+      //case delete
+      if (action.payload.type === "delete") {
+        state.userProfile.Addresses = state.userProfile.Addresses.filter(
+          (item) => item.id !== action.payload.id
+        );
+        if (action.payload.lastestId) {
+          const idx = state.userProfile.Addresses.findIndex(
+            (item) => item.id === action.payload.lastestId
+          );
+          state.userProfile.Addresses[idx].lastest = true;
+        }
+      }
+      //case edit
+      let idx = state.userProfile.Addresses.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      console.log(idx);
+      state.userProfile.Addresses[idx] = {
+        ...state.userProfile.Addresses[idx],
+        ...action.payload.value,
+      };
     },
     createNewAddress: (state, action) => {
       if (state.userProfile.Addresses.length > 0) {
@@ -184,7 +202,10 @@ const userSlice = createSlice({
     },
     selectNewDefaultPayment: (state, action) => {
       console.log(action.payload);
-      state.newSelectedPaymentId = { ...state.newSelectedPaymentId,...action.payload };
+      state.newSelectedPaymentId = {
+        ...state.newSelectedPaymentId,
+        ...action.payload,
+      };
     },
     updateSelectedPayment: (state, action) => {
       console.log(action.payload);
@@ -199,24 +220,33 @@ const userSlice = createSlice({
     },
     UpdatePaymentsTime: (state, action) => {
       console.log(action.payload);
-      const index = action.payload.findIndex(item=>item.stripePaymentId===state.defaultPayment.id)
-      console.log(index)
-      state.defaultPayment.updatedAt = action.payload[index].updatedAt
+      const index = action.payload.findIndex(
+        (item) => item.stripePaymentId === state.defaultPayment.id
+      );
+      console.log(index);
+      state.defaultPayment.updatedAt = action.payload[index].updatedAt;
       state.userAllPaymentMethods = state.userAllPaymentMethods.map((item1) => {
         for (let item of action.payload) {
           if (item1.id === item.stripePaymentId) {
-            return { ...item1, updatedAt: item.updatedAt, lastest: item.lastest };
+            return {
+              ...item1,
+              updatedAt: item.updatedAt,
+              lastest: item.lastest,
+            };
           }
         }
       });
     },
     setOrderSuccess: (state, action) => {
-      state.orderSuccess = action.payload
+      state.orderSuccess = action.payload;
     },
     setError: (state, action) => {
-      console.log(action.payload)
-      state.haveAddressPayment = {...state.haveAddressPayment,...action.payload}
-    }
+      console.log(action.payload);
+      state.haveAddressPayment = {
+        ...state.haveAddressPayment,
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -249,7 +279,7 @@ export const {
   setOrderSuccess,
   setError,
   setEditAddressId,
-  editUserProfileAddress
+  editUserProfileAddress,
 } = userSlice.actions;
 
 export const handleHoverProfile = (status) => (dispatch) => {
@@ -258,7 +288,7 @@ export const handleHoverProfile = (status) => (dispatch) => {
 
 export const deleteProductFromCart = (cartId) => async (dispatch) => {
   try {
-    const res = await userApi.deleteProductFromCart({cartId});
+    const res = await userApi.deleteProductFromCart({ cartId });
     if (res.status === 201) {
       dispatch(clickDeleteProductInCart(cartId));
     }

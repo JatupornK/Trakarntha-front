@@ -15,6 +15,8 @@ export const createNewAddress = (input) => axios.post("/users/address", input);
 
 export const editAddress = (input) => axios.patch('/users/edit/address', input);
 
+export const deleteAddress = (input) => axios.patch('/users/delete/address', input);
+
 export const chooseNewAddress = (addressId) => axios.patch('/users/address/update', addressId)
 
 export const createCustomer = (input) => axios.post('/users/stripe/create-customer', input)

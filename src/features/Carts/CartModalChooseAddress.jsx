@@ -3,7 +3,7 @@ import CartAddressItem from "./CartAddressItem";
 import { updateSelectedAddress } from "../../stores/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as userApi from '../../apis/user-api';
-export default function CartModalChooseAddress({ onClose, address, onEdit }) {
+export default function CartModalChooseAddress({ onClose, address, onEdit, onDelete }) {
   const dispatch = useDispatch();
   const {newSelectedAddressId} = useSelector(state=>state.user)
   console.log(newSelectedAddressId)
@@ -31,7 +31,7 @@ export default function CartModalChooseAddress({ onClose, address, onEdit }) {
           onSubmit={handleSubmit}
           className="row-span-7 h-full row-start-2 row-end-9 min-w-0 min-h-0 grid grid-rows-7"
         >
-          <CartAddressItem address={address} onEdit={onEdit} />
+          <CartAddressItem address={address} onEdit={onEdit} onDelete={onDelete} />
         </form>
         <AiOutlineClose
           size={40}
