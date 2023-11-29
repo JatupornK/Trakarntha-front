@@ -18,8 +18,6 @@ const CARD_OPTION = {
     base: {
       iconColor: "#c4f0ff",
       color: "#fff",
-      // fontWeigh: 500,
-      // '-webkit-autofill':{color:'#fce883'},
       "::placeholder": { color: "#87bbfd" },
     },
     invalid: {

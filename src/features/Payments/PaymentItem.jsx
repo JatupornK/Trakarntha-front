@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNewDefaultPayment } from "../../stores/userSlice";
-
+import { AiFillDelete } from "react-icons/ai";
 export default function PaymentItem() {
-  const { defaultPayment, userAllPaymentMethods } = useSelector((state) => state.user);
+  const { defaultPayment, userAllPaymentMethods } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
-//   console.log(defaultPayment);
-console.log(userAllPaymentMethods, defaultPayment)
+  //   console.log(defaultPayment);
+  // console.log(userAllPaymentMethods, defaultPayment);
   const compareFn = (a, b) => {
     return a.updatedAt < b.updatedAt ? 1 : -1;
   };
@@ -28,7 +30,9 @@ console.log(userAllPaymentMethods, defaultPayment)
             name="address"
             className="w-5 h-5 checked:accent-red-500 cursor-pointer"
             autoComplete="off"
-              onChange={(e)=>dispatch(selectNewDefaultPayment({id:e.target.id}))}
+            onChange={(e) =>
+              dispatch(selectNewDefaultPayment({ id: e.target.id }))
+            }
           />
           <img
             src={
@@ -39,7 +43,12 @@ console.log(userAllPaymentMethods, defaultPayment)
             width={30}
             height={30}
           />
-          **** **** **** {defaultPayment.last4}
+          <span className="flex-1">**** **** **** {defaultPayment.last4}</span>
+          <AiFillDelete
+            className="cursor-pointer hover:bg-gray-300 rounded-md"
+            size={20}
+            color="gray"
+          />
         </div>
         <hr className="border-1 border-gray-200" />
         {userPaymentMethods.sort(compareFn).map((item, idx) => {
@@ -52,8 +61,8 @@ console.log(userAllPaymentMethods, defaultPayment)
                   name="address"
                   className="w-5 h-5 checked:accent-red-500 cursor-pointer"
                   autoComplete="off"
-                  onChange={(e)=>{
-                    dispatch(selectNewDefaultPayment({id:e.target.id}))
+                  onChange={(e) => {
+                    dispatch(selectNewDefaultPayment({ id: e.target.id }));
                   }}
                 />
                 <img
@@ -65,9 +74,15 @@ console.log(userAllPaymentMethods, defaultPayment)
                   width={30}
                   height={30}
                 />
-                **** **** **** {item.last4}
+                <span className="flex-1">**** **** **** {item.last4}</span>
+                <AiFillDelete
+                  className="cursor-pointer hover:bg-gray-300 rounded-md"
+                  size={20}
+                  color="gray"
+                />
               </div>
-              {(userPaymentMethods.length - 1 !== idx || userPaymentMethods.length < 9) && (
+              {(userPaymentMethods.length - 1 !== idx ||
+                userPaymentMethods.length < 9) && (
                 <hr className="border-1 border-gray-200" />
               )}
             </div>

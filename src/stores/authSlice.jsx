@@ -77,7 +77,7 @@ export const fetchUserData = () => async (dispatch) => {
         authApi.getMe(),
         authApi.getUserCartData(),
       ]);
-      console.log(user)
+      // console.log(user)
       dispatch(fetchCartData(cart.data.productsInCart));
       dispatch(setUserProfile(user.data.user));
     }

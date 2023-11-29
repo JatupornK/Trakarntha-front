@@ -32,6 +32,7 @@ const userSlice = createSlice({
     inputCreateAddress: initialInputCreateAddress,
     errorCreateAddress: initialInputCreateAddress,
     newSelectedAddressId: { id: "" },
+    editAddressId: {id:''},
     defaultPayment: initialDefaultPayment,
     userAllPaymentMethods: [],
     newSelectedPaymentId: { id: "" },
@@ -40,7 +41,7 @@ const userSlice = createSlice({
   },
   reducers: {
     setUserProfile: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       state.userProfile = action.payload;
     },
     setIsHoverProfile: (state, action) => {
@@ -48,20 +49,20 @@ const userSlice = createSlice({
     },
     userLogout: (state, action) => {
       state.userProfile= null,
-    state.isHoverProfile= false,
-    state.cartData= [],
-    state.buyNow= {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
-    state.inputCreateAddress= initialInputCreateAddress,
-    state.errorCreateAddress= initialInputCreateAddress,
-    state.newSelectedAddressId= { id: "" },
-    state.defaultPayment= initialDefaultPayment,
-    state.userAllPaymentMethods= [],
-    state.newSelectedPaymentId= { id: "" },
-    state.orderSuccess= false,
-    state.haveAddressPayment= initialError
+      state.isHoverProfile= false,
+      state.cartData= [],
+      state.buyNow= {}, // อย่าลืมไปเพิ่มตอนกด buy now ให้ add product ใน cartData
+      state.inputCreateAddress= initialInputCreateAddress,
+      state.errorCreateAddress= initialInputCreateAddress,
+      state.newSelectedAddressId= { id: "" },
+      state.defaultPayment= initialDefaultPayment,
+      state.userAllPaymentMethods= [],
+      state.newSelectedPaymentId= { id: "" },
+      state.orderSuccess= false,
+      state.haveAddressPayment= initialError
     },
     fetchCartData: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       state.cartData = [...action.payload];
     },
     resetCartData: (state, action) => {
@@ -109,7 +110,7 @@ const userSlice = createSlice({
       state.buyNow = action.payload;
     },
     setInputCreateAddress: (state, action) => {
-      // console.log(action.payload);
+      console.log(action.payload);
       state.inputCreateAddress = {
         ...state.inputCreateAddress,
         ...action.payload,
@@ -122,6 +123,15 @@ const userSlice = createSlice({
     resetInputErrorCreateAddress: (state, action) => {
       state.errorCreateAddress = initialInputCreateAddress;
       state.inputCreateAddress = initialInputCreateAddress;
+    },
+    setEditAddressId: (state, action) => {
+      state.editAddressId = {...state.editAddressId,...action.payload}
+    },
+    editUserProfileAddress: (state, action) => {
+      console.log(action.payload)
+      let idx = state.userProfile.Addresses.findIndex(item=>item.id===action.payload.id);
+      console.log(idx)
+      state.userProfile.Addresses[idx]={...state.userProfile.Addresses[idx],...action.payload.value}
     },
     createNewAddress: (state, action) => {
       if (state.userProfile.Addresses.length > 0) {
@@ -153,28 +163,28 @@ const userSlice = createSlice({
       state.userProfile.Addresses[idx].lastest = true;
     },
     selectNewAddress: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       state.newSelectedAddressId = { ...action.payload };
     },
     setDefaultPayment: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.defaultPayment = { ...state.defaultPayment, ...action.payload };
     },
     setAllUserPaymentMethods: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.userAllPaymentMethods = action.payload;
     },
     setNewStripeCustomer: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.userProfile.stripeCustomerId = action.payload;
     },
     addNewPayment: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.userAllPaymentMethods.unshift(action.payload);
     },
     selectNewDefaultPayment: (state, action) => {
       console.log(action.payload);
-      state.newSelectedPaymentId = { ...action.payload };
+      state.newSelectedPaymentId = { ...state.newSelectedPaymentId,...action.payload };
     },
     updateSelectedPayment: (state, action) => {
       console.log(action.payload);
@@ -237,7 +247,9 @@ export const {
   updateSelectedPayment,
   UpdatePaymentsTime,
   setOrderSuccess,
-  setError
+  setError,
+  setEditAddressId,
+  editUserProfileAddress
 } = userSlice.actions;
 
 export const handleHoverProfile = (status) => (dispatch) => {

@@ -3,7 +3,7 @@ import { AiOutlineClose } from "react-icons/ai";
 // import { useDispatch } from "react-redux";
 // import { resetInputErrorCreateAddress } from "../../stores/userSlice";
 
-export default function CartModalContent({ onClose, children }) {
+export default function CartModalContent({ onClose, children, text }) {
   // const dispatch = useDispatch();
   // const handleClickCloseAddNewAddress = () => {
   //   onClose();
@@ -12,7 +12,7 @@ export default function CartModalContent({ onClose, children }) {
   return (
     <div className="min-w-0 min-h-0 col-span-12 grid grid-rows-1">
       <div className="px-7 py-5 text-2xl flex flex-col justify-center row-span-1">
-        <p>New Address</p>
+        <p>{text}</p>
         {children}
         {/* <CartModalAddNewAddress onSuccess={handleClickCloseAddNewAddress} /> */}
       </div>

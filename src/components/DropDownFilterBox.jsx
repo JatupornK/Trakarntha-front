@@ -17,7 +17,7 @@ export default function DropDownFilterBox({ category }) {
           }}
         >
           <hr className="border-1 border-gray-200" />
-          <div className={`flex flex-row p-2 md:py-5 items-center border ${idx===1 && 'border-x-0'} border-black md:border-none`}>
+          <div className={`flex flex-row p-2 md:py-5 items-center border border-black md:border-none`}>
             <div className="flex-1 text-xs sm:text-base">{item.title}</div>
             {!filter[idx] ? (
               <AiOutlinePlus className="md:w-5 md:h-5 sm:w-4 sm:h-4 w-3 h-3" />

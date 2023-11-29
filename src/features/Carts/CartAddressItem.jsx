@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { selectNewAddress } from "../../stores/userSlice";
-// import CartAddNewAddress from "./CartAddNewAddress";
-export default function CartAddressItem({ address }) {
+import { AiFillDelete,AiFillEdit } from "react-icons/ai";
+export default function CartAddressItem({ address, onEdit }) {
   const dispatch = useDispatch();
-  console.log(address)
+  // console.log(address)
   const addressLastest = address.filter((item) => item.lastest === true);
   address = address.filter((item) => item.lastest !== true);
   useEffect(() => {
@@ -44,6 +44,8 @@ export default function CartAddressItem({ address }) {
               {addressLastest[0].address} {addressLastest[0].postCode}
             </p>
           </div>
+          <AiFillEdit onClick={()=>onEdit(addressLastest[0].id)} className="cursor-pointer hover:bg-gray-300 rounded-md" size={30} color="gray" />
+          <AiFillDelete className="cursor-pointer hover:bg-gray-300 rounded-md" size={30} color="gray" />
         </div>
         <hr className="border-1 border-gray-200" />
         {address.sort(compareFn).map((item, idx) => {
@@ -75,6 +77,8 @@ export default function CartAddressItem({ address }) {
                     {item.address} {item.postCode}
                   </p>
                 </div>
+                <AiFillEdit onClick={()=>onEdit(item.id)} className="cursor-pointer hover:bg-gray-300 rounded-md" size={30} color="gray" />
+                <AiFillDelete className="cursor-pointer hover:bg-gray-300 rounded-md" size={30} color="gray" />
               </div>
               {(address.length - 1 !== idx || address.length<4) && (
                 <hr className="border-1 border-gray-200" />

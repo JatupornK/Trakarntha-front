@@ -17,6 +17,7 @@ export default function CartOrderSummaryContent() {
   const { newSelectedAddressId, defaultPayment, userProfile,cartData } = useSelector(
     (state) => state.user
   );
+  console.log(userProfile)
   const {startLoading, stopLoading} = useLoading();
   const stripe = useStripe();
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import ProductBox from "../../components/ProductBox";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../stores/productSlice";

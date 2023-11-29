@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import useLoading from "./hooks/useLoading";
 import LoadingContainer from "./components/LoadingContainer";
 import { useEffect } from "react";
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
   useEffect(() => {
     div.style.overflowY = loading ? "hidden" : "unset";
   }, [loading]);
-  console.log(loading)
+  
   return (
     <>
       <Elements stripe={stripePromise}>

@@ -33,7 +33,7 @@ export default function CartAddNewAddress() {
       {open && (
         <Modal style={{ width: "500px" }}>
           {/* <CartModalContent onClose={handleClose}> */}
-          <CartModalContent onClose={handleClickCloseAddNewAddress}>
+          <CartModalContent text={'New Address'} onClose={handleClickCloseAddNewAddress}>
             <CartModalAddNewAddress onSuccess={handleClickCloseAddNewAddress} />
           </CartModalContent>
         </Modal>

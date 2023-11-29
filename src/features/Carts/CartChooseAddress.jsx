@@ -12,7 +12,7 @@ export default function CartChooseAddress() {
     (item) => item.lastest === true
   );
   useEffect(() => {
-    console.log(lastestAddress);
+    // console.log(lastestAddress);
     if (userProfile.Addresses.length > 0) {
       dispatch(selectNewAddress({ id: +lastestAddress[0].id }));
     }

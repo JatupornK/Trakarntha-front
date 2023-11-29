@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export default function PaymentModalContent({ onClose }) {
     const {newSelectedPaymentId} = useSelector(state=>state.user);
     const dispatch = useDispatch();
-    
+    console.log(newSelectedPaymentId)
     useEffect(()=>{
         const fetchUpdatePaymentTime = async() => {
             const res = await userApi.getUpdatedPaymentTime();

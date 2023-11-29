@@ -5,10 +5,12 @@
 // import { setBuyNow } from "../stores/userSlice";
 // import { AiFillCaretRight, AiFillCaretLeft } from "react-icons/ai";
 
+import React from "react";
+
 // import React, { useState } from "react";
 
 // export default function Modal({ onClose, product, children }) {
-export default function Modal({ children, width,style }) {
+export default function Modal({ children, width, style, isSecondOpen }) {
   // const [imageShow, setImageShow] = useState(0);
   // const dispatch = useDispatch()
   // const handleChangeImageShow = () => {
@@ -27,16 +29,19 @@ export default function Modal({ children, width,style }) {
   // console.log(product);
   // const [firstModal, setFirstModal] = useState(true);
   // const [secondModal, setSecondModal] = useState(false);
-  // const childrenArray = React.Children.toArray(children);
-  // console.log(childrenArray)
+  const childrenArray = React.Children.toArray(children);
+  console.log(childrenArray);
   return (
     <>
       <div className="fixed left-0 top-0 h-full w-full z-50">
         <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-50"></div>
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative w-screen h-screen">
-            <div style={style} className={`bg-white container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${width} h-4/6 opacity-100 grid grid-flow-col grid-cols-12`}>
-              {children}
+            <div
+              style={style}
+              className={`bg-white container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${width} h-4/6 opacity-100 grid grid-flow-col grid-cols-12`}
+            >
+              {childrenArray[0]}
               {/* {firstModal && childrenArray[0]} */}
               {/* <button onClick={()=>setSecondModal(true)}>asdf</button> */}
               {/* <div
@@ -78,6 +83,12 @@ export default function Modal({ children, width,style }) {
                 />
               </div> */}
             </div>
+            {isSecondOpen && <div
+              style={style}
+              className={`bg-white container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${width} h-4/6 opacity-100 grid grid-flow-col grid-cols-12`}
+            >
+              {childrenArray[1]}
+            </div>}
             {/* {secondModal && <div className="z-10 bg-white container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${width} h-4/6 opacity-100 grid grid-flow-col grid-cols-12">
             {childrenArray[1]}
             </div>} */}

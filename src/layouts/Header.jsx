@@ -113,9 +113,12 @@ export default function Header() {
         </div>
         <hr className="border-2 border-gray-200" />
       </div>
-      <div className="min-vh-10">
+      <div className="">
         <Outlet />
       </div>
+      {/* <div className="w-full"> //why all products page can't reach max height
+        eieieieieieiei
+      </div> */}
     </>
   );
 }

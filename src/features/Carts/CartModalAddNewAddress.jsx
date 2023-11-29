@@ -5,30 +5,64 @@ import {
   setInputCreateAddress,
   createNewAddress,
   setError,
-  selectNewAddress
+  selectNewAddress,
+  setUserProfile,
+  editUserProfileAddress,
 } from "../../stores/userSlice";
 import * as userApi from "../../apis/user-api";
 import useLoading from "../../hooks/useLoading";
-export default function CartModalAddNewAddress({ onSuccess }) {
-  const { inputCreateAddress, errorCreateAddress } = useSelector(
-    (state) => state.user
-  );
-  const {startLoading, stopLoading} = useLoading();
+export default function CartModalAddNewAddress({ onSuccess, edit }) {
+  const { inputCreateAddress, errorCreateAddress, editAddressId, userProfile } =
+    useSelector((state) => state.user);
+  const { startLoading, stopLoading } = useLoading();
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       startLoading();
+      console.log(inputCreateAddress);
       const isError = validateCreateAddress(inputCreateAddress);
       if (isError) {
         dispatch(setErrorCreateAddress(isError));
       } else {
+        if (edit) {
+          if (
+            userProfile.Addresses.findIndex(
+              (item) =>
+                item.addressTitle === inputCreateAddress.addressTitle &&
+                item.firstName === inputCreateAddress.firstName &&
+                item.lastName === inputCreateAddress.lastName &&
+                item.address === inputCreateAddress.address &&
+                item.phoneNumber === inputCreateAddress.phoneNumber &&
+                item.postCode === inputCreateAddress.postCode
+            ) !== -1
+          ) {
+            dispatch(setError({ address: "" }));
+            onSuccess();
+            return;
+          }
+          const res = await userApi.editAddress({
+            Address: inputCreateAddress,
+            id: editAddressId.id,
+          });
+          if (res.status === 201) {
+            dispatch(
+              editUserProfileAddress({
+                id: editAddressId.id,
+                value: inputCreateAddress,
+              })
+            );
+            dispatch(setError({ address: "" }));
+            onSuccess();
+            return;
+          }
+        }
         const res = await userApi.createNewAddress(inputCreateAddress);
         if (res.status === 201) {
           onSuccess();
-          dispatch(createNewAddress(res.data.message))
-          dispatch(setError({address:''}))
-          dispatch(selectNewAddress({id:res.data.message.id}))
+          dispatch(createNewAddress(res.data.message));
+          dispatch(setError({ address: "" }));
+          dispatch(selectNewAddress({ id: res.data.message.id }));
         }
       }
     } catch (err) {
@@ -63,7 +97,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.addressTitle && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.addressTitle}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.addressTitle}
+          </p>
         )}
       </div>
       <div className="relative col-span-4">
@@ -86,7 +122,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.firstName && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.firstName}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.firstName}
+          </p>
         )}
       </div>
       <div className="relative col-span-4">
@@ -109,7 +147,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.lastName && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.lastName}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.lastName}
+          </p>
         )}
       </div>
       <div className="relative col-span-4">
@@ -132,7 +172,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.address && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.address}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.address}
+          </p>
         )}
       </div>
       <div className="relative col-span-2">
@@ -155,7 +197,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.phoneNumber && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.phoneNumber}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.phoneNumber}
+          </p>
         )}
       </div>
       <div className="relative col-span-2">
@@ -178,7 +222,9 @@ export default function CartModalAddNewAddress({ onSuccess }) {
           }
         />
         {errorCreateAddress?.postCode && (
-          <p className="absolute text-xs text-red-500">{errorCreateAddress.postCode}</p>
+          <p className="absolute text-xs text-red-500">
+            {errorCreateAddress.postCode}
+          </p>
         )}
       </div>
       <button

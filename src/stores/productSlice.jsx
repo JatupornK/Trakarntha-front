@@ -19,7 +19,6 @@ const productSlice = createSlice({
   },
   reducers: {
     resetState: (state, action) => {
-      // state.isHover = Array.from(state.products, (x)=> false)
       state.filter = [true, false, false];
       state.textSort = "Sort by";
       state.size = [];
